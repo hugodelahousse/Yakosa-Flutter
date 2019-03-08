@@ -1,4 +1,4 @@
-package fr.yakosa.flutterapp;
+package com.example.app;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
