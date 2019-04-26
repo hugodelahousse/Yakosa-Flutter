@@ -17,30 +17,48 @@ class Auth {
     _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) async {
       if (account != null) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        if (prefs.getString('token') == null || prefs.getString("token").length < 100) {
-          var auth = await account.authentication;
-          var server = await http.get("http://localhost:3000/auth/google/token?access_token=" + auth.idToken);
-          if (server.statusCode == 200) {
-            var jsonResponse = await json.decode(server.body);
-            await prefs.setString('token', jsonResponse['token']);
-            await prefs.setString('refresh', jsonResponse['refresh']);
-            await prefs.setString('googleId', jsonResponse['googleId']);
-            Navigator.pushNamed(context, '/home');
+        if (prefs.getString('token') == null || prefs.getString('token').length < 100) {
+          try {
+            var auth = await account.authentication;
+            var server = await http.get('http://localhost:3000/auth/google/token?access_token=' + auth.idToken);
+            if (server.statusCode == 200) {
+              var jsonResponse = await json.decode(server.body);
+              await prefs.setString('token', jsonResponse['token']);
+              await prefs.setString('refresh', jsonResponse['refresh']);
+              await prefs.setString('googleId', jsonResponse['googleId']);
+              Navigator.pushNamed(context, '/home');
+            }
+          } catch (error) {
+            print('Authentication request failed : ' + error.toString());
+            await signOut();
           }
         } else {
           Navigator.pushNamed(context, '/home');
         }
       }
     });
-    _googleSignIn.signInSilently();
+    try {
+      _googleSignIn.signInSilently();
+    } catch (error) {
+      print('Google Sign in silenty failed : ' + error.toString());
+    }
   }
 
-  signOut() {
+  signOut() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+    await prefs.remove('refresh');
+    await prefs.remove('googleId');
     _googleSignIn.signOut();
   }
 
   googleConnect() async {
-    await _googleSignIn.signIn();
+    try {
+      await _googleSignIn.signIn();
+    } catch (error) {
+      print('Google Sign in request failed : ' + error.toString());
+      await signOut();
+    }
   }
 
   facebookConnect() {
