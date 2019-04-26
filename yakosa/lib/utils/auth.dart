@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
@@ -31,6 +32,7 @@ class Auth {
           } catch (error) {
             print('Authentication request failed : ' + error.toString());
             await signOut();
+            _showErrorDialog(context);
           }
         } else {
           Navigator.pushNamed(context, '/home');
@@ -64,4 +66,22 @@ class Auth {
   facebookConnect() {
     print("FACEBOOK CONNECT");
   }  
+
+  _showErrorDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return new CupertinoAlertDialog(
+          title: new Text("Login failed"),
+          content: new Text("Network error : Please retry later"),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text("OK"),
+            ),
+        ]);
+      }
+    );
+  }
 }

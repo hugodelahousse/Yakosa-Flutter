@@ -18,10 +18,17 @@ class LoginPageState extends State<LoginPage> {
 
   final Auth auth = Auth();
 
+  void initState() {
+    super.initState();
+    auth.signOut();
+    auth.listenLogin(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF780B7C),
+      resizeToAvoidBottomPadding: false,
       body: Stack(
         children: <Widget>[
           BackgroundOverlay(Color(0xFF780B7C), 'assets/images/yakosa_login.jpg'),
@@ -45,11 +52,5 @@ class LoginPageState extends State<LoginPage> {
         ],
       ),
       );
-  }
-
-  void initState() {
-    super.initState();
-    auth.signOut();
-    auth.listenLogin(context);
   }
 }

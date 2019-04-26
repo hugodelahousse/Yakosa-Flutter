@@ -15,7 +15,7 @@ class SignInButton extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.9, // match_parent
       child: RaisedButton(
         color: _backgroundColor,
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 75),
+        padding: const EdgeInsets.symmetric(vertical: 15),
         child: Text(_text,
           style: TextStyle(
             fontFamily: 'SF Pro Text', 
