@@ -16,10 +16,15 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
 
-  final Auth auth = Auth();
+  Auth auth;
+  bool _isLoading = false;
+  set isLoading(bool value) {
+    this.setState(() => _isLoading = value);
+  }
 
   void initState() {
     super.initState();
+    auth = Auth(this);
     auth.signOut();
     auth.listenLogin(context);
   }
@@ -41,9 +46,10 @@ class LoginPageState extends State<LoginPage> {
                 new Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                  SignInButton("Sign in with Google", Color(0xFFF3465B), Color(0xFFFFFFFF), auth.googleConnect),
+                  _isLoading ? SignInButton("", Color(0xFFF3465B), Color(0xFFFFFFFF), () {}, true) : 
+                    SignInButton("Sign in with Google", Color(0xFFF3465B), Color(0xFFFFFFFF), _googleConnect, false),
                   Padding(padding: EdgeInsets.only(top: 10),),
-                  SignInButton("Sign in with Facebook", Color(0xFF3A5997), Color(0xFFFFFFFF), auth.facebookConnect),
+                  SignInButton("Sign in with Facebook", Color(0xFF3A5997), Color(0xFFFFFFFF), _facebookConnect, false),
                   ]
                 )
               ],
@@ -52,5 +58,15 @@ class LoginPageState extends State<LoginPage> {
         ],
       ),
       );
+  }
+
+  _googleConnect() {
+    isLoading = true;
+    auth.googleConnect();
+  }
+
+  _facebookConnect() {
+    isLoading = true;
+    auth.facebookConnect();
   }
 }

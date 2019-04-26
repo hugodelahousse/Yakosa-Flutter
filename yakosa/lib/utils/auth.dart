@@ -7,12 +7,18 @@ import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:yakosa/screens/login_page.dart';
+
 class Auth {
-    final GoogleSignIn _googleSignIn = GoogleSignIn(
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
       'email',
     ],
   );
+
+  final LoginPageState _instance;
+
+  Auth(this._instance);
 
   listenLogin(BuildContext context) {
     _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) async {
@@ -27,6 +33,7 @@ class Auth {
               await prefs.setString('token', jsonResponse['token']);
               await prefs.setString('refresh', jsonResponse['refresh']);
               await prefs.setString('googleId', jsonResponse['googleId']);
+              _instance.isLoading =  false;
               Navigator.pushNamed(context, '/home');
             }
           } catch (error) {
@@ -35,6 +42,7 @@ class Auth {
             _showErrorDialog(context);
           }
         } else {
+          _instance.isLoading =  false;
           Navigator.pushNamed(context, '/home');
         }
       }
@@ -52,11 +60,14 @@ class Auth {
     await prefs.remove('refresh');
     await prefs.remove('googleId');
     _googleSignIn.signOut();
+    _instance.isLoading =  false;
   }
 
   googleConnect() async {
     try {
-      await _googleSignIn.signIn();
+      GoogleSignInAccount account = await _googleSignIn.signIn();
+      if (account == null)
+        _instance.isLoading = false;
     } catch (error) {
       print('Google Sign in request failed : ' + error.toString());
       await signOut();
