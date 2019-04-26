@@ -20,7 +20,10 @@ class LoginSliderState extends State<LoginSlider> {
         CarouselSlider(
           height: 160,
           enlargeCenterPage: true,
-          autoPlay: false,
+          autoPlay: true,
+          autoPlayInterval: Duration(seconds: 4),
+          enableInfiniteScroll: true,
+          pauseAutoPlayOnTouch: Duration(seconds: 2),
           items: <Widget>[
             SlideItem("Fill your shopping list", "Add your all your products prefereneces within the app in a few touches"),
             SlideItem("Find near promotions", "Your nearly grocery shops will list every promotions related to your shopping list"),
@@ -38,12 +41,12 @@ class LoginSliderState extends State<LoginSlider> {
               return Builder(
                 builder: (BuildContext context) {
                   return Container(
-                    width: 10.0,
-                    height: 10.0,
+                    width: 15.0,
+                    height: 15.0,
                     margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: _currentSlide == i ? Color.fromRGBO(0, 0, 0, 0.8) : Color.fromRGBO(255, 255, 255, 1)
+                      color: _currentSlide == i ? Color.fromRGBO(255, 255, 255, 1) : Color.fromRGBO(0, 0, 0, 0.8)
                     ),
               );
             });
