@@ -35,6 +35,10 @@ class Auth {
     _googleSignIn.signInSilently();
   }
 
+  signOut() {
+    _googleSignIn.signOut();
+  }
+
   googleConnect() async {
     await _googleSignIn.signIn();
   }
