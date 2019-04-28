@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:yakosa/screens/login_page.dart';
+import 'package:yakosa/utils/api.dart';
 
 class Auth {
   final GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -27,7 +27,7 @@ class Auth {
         if (prefs.getString('token') == null || prefs.getString('token').length < 100) {
           try {
             var auth = await account.authentication;
-            var server = await http.get('http://localhost:3000/auth/google/token?access_token=' + auth.idToken);
+            var server = await Api.getTokenWithGoogleToken(auth.idToken);
             if (server.statusCode == 200) {
               var jsonResponse = await json.decode(server.body);
               await prefs.setString('token', jsonResponse['token']);
