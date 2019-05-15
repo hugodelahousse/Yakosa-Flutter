@@ -34,7 +34,7 @@ class Auth {
               await prefs.setString('refresh', jsonResponse['refresh']);
               await prefs.setString('googleId', jsonResponse['googleId']);
               _instance.isLoading =  false;
-              Navigator.pushNamed(context, '/home');
+              Navigator.pushReplacementNamed(context, '/home');
             }
           } catch (error) {
             print('Authentication request failed : ' + error.toString());
@@ -43,7 +43,7 @@ class Auth {
           }
         } else {
           _instance.isLoading =  false;
-          Navigator.pushNamed(context, '/home');
+          Navigator.pushReplacementNamed(context, '/home');
         }
       }
     });
@@ -94,5 +94,13 @@ class Auth {
         ]);
       }
     );
+  }
+
+  static Future<bool> isTokenDefined() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token') != null &&
+            prefs.getString('token').length >= 100 &&
+            prefs.getString('refresh') != null &&
+            prefs.getString('refresh').length >= 100;
   }
 }

@@ -25,7 +25,6 @@ class LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     auth = Auth(this);
-    auth.signOut();
     auth.listenLogin(context);
   }
 
