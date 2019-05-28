@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:yakosa/utils/size_config.dart';
+
+import 'package:yakosa/components/home_page/big_button.dart';
+
 class HomePage extends StatefulWidget {
 @override
   State<StatefulWidget> createState() {
@@ -17,20 +21,41 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       backgroundColor: Color(0xFFFFFFFF),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text("Connected"),
-            FlatButton(onPressed: signOut,
-              child: Text("Sign Out", style: TextStyle(fontSize: 25)),
-              color: Colors.black87, textColor: Colors.white),
-          ],
-        ),
-      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                FlatButton(child: Text("Sign Out"), color: Colors.black, textColor: Colors.white, onPressed: signOut),
+                Text("Hello Adrien,", style: TextStyle(fontSize: SizeConfig.blockSizeHorizontal * 10.0, color: Colors.black, fontWeight: FontWeight.bold)),
+                Padding(padding: EdgeInsets.all(10)),
+                BigButton(SizeConfig.blockSizeVertical * 10.0, SizeConfig.blockSizeHorizontal * 10.0, SizeConfig.blockSizeHorizontal * 5.0, "Shopping Lists", colors: [ Color(0xFFFC6076), Color(0xFFFF9944)]),
+                Padding(padding: EdgeInsets.all(10)),
+                BigButton(SizeConfig.blockSizeVertical * 10.0, SizeConfig.blockSizeHorizontal * 10.0, SizeConfig.blockSizeHorizontal * 5.0, "Promotions", colors: [ Color(0xFF30D2BE), Color(0xFF473B7B)]),
+                Padding(padding: EdgeInsets.all(10)),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: BigButton(SizeConfig.blockSizeVertical * 2.0, SizeConfig.blockSizeHorizontal * 8.0, SizeConfig.blockSizeHorizontal * 3.0, "Account", colors: [ Colors.grey, Colors.grey.withOpacity(0.5)]),
+                    ),
+                    Padding(padding: EdgeInsets.all(5)),
+                    Expanded(
+                      child: BigButton(SizeConfig.blockSizeVertical * 2.0, SizeConfig.blockSizeHorizontal * 8.0, SizeConfig.blockSizeHorizontal * 3.0, "Settings"),
+                    ),
+                  ]
+                ),
+                Padding(padding: EdgeInsets.all(10)),
+              ],
+            )
+          )
+        )
+      )
     );
   }
 

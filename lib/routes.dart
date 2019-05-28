@@ -16,6 +16,7 @@ class Routes {
       runApp(MaterialApp(
         title: "Yakosa",
         home: signedIn ? HomePage() : LoginPage(),
+        //home: HomePage(),
         routes: routes,
       ));
     });
