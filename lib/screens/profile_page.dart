@@ -32,8 +32,8 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
   final query = r"""
-    query Profile($id: ID!) {
-      user(id: $id) {
+    query Profile{
+      user: currentUser {
         firstName
         lastName
         age
@@ -54,7 +54,7 @@ class ProfilePageState extends State<ProfilePage> {
           if (result.loading) {
             return Center(child: CircularProgressIndicator());
           }
-          if (result.data == null) {
+          if (result.data == null || result.data['user'] == null) {
             return Center(child : Text("An error has occured"));
           }
 

@@ -21,7 +21,7 @@ class Routes {
     final AuthLink authLink = AuthLink(
       getToken: () async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        return '';
+        return 'JWT ${prefs.getString('token')}';
       },
     );
 
@@ -39,7 +39,7 @@ class Routes {
           client: client,
           child: MaterialApp(
             title: "Yakosa",
-            home: ProfilePage(),
+            home:  signedIn ? ProfilePage() : LoginPage(),
             routes: routes,
           )
       ));
