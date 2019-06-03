@@ -6,6 +6,13 @@ import 'package:yakosa/models/product.dart';
 
 
 class ShoppingListPage extends StatelessWidget {
+
+  final String shoppingListId;
+
+  ShoppingListPage({
+    @required this.shoppingListId,
+  });
+
   static const query = r"""
   query ShoppingList($id: ID!){
 	  shoppingList(id: $id){
@@ -24,12 +31,11 @@ class ShoppingListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Query(
         options: QueryOptions(
             document: query,
-            variables: { "id": 2 },
+            variables: { "id": shoppingListId },
         ),
         builder: (QueryResult result, { VoidCallback refetch }) {
           if (result.errors != null) {

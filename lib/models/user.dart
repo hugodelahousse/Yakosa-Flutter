@@ -16,5 +16,5 @@ class User {
     this.age
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => _$User(json);
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }
