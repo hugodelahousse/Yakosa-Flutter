@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yakosa/utils/api.dart';
 
 import './screens/login_page.dart';
+import './screens/settings_page.dart';
 import './screens/layout.dart';
 
 import './utils/auth.dart';
@@ -12,6 +13,7 @@ import './utils/auth.dart';
 class Routes {
   final routes = <String, WidgetBuilder>{
       '/login': (context) => LoginPage(),
+      '/settings': (context) => SettingsPage(),
       '/home': (context) => Layout(),
   };
 
