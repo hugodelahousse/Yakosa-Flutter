@@ -3,6 +3,8 @@ import 'package:yakosa/utils/size_config.dart';
 
 //Screens
 import 'package:yakosa/screens/home_page.dart';
+import 'package:yakosa/screens/profile_page.dart';
+import 'package:yakosa/screens/settings_page.dart';
 
 class Layout extends StatefulWidget {
 @override
@@ -14,6 +16,8 @@ class Layout extends StatefulWidget {
 class LayoutState extends State<Layout> {
   final _screens = [
     {"page": HomePage(), "icon": Icons.home},
+    {"page": ProfilePage(), "icon": Icons.account_circle},
+    {"page": SettingsPage(), "icon": Icons.settings},
   ];
   Widget _currentPage = HomePage();
 
@@ -27,6 +31,7 @@ class LayoutState extends State<Layout> {
     return Container(
       color: Colors.white,
       child: SafeArea(
+        top: false,
         child: Scaffold(
           backgroundColor: Color(0xFFFFFFFF),
           body: _currentPage,
