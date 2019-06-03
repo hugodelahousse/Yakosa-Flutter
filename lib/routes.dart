@@ -5,14 +5,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yakosa/utils/api.dart';
 
 import './screens/login_page.dart';
-import './screens/home_page.dart';
+import './screens/layout.dart';
 
 import './utils/auth.dart';
 
 class Routes {
   final routes = <String, WidgetBuilder>{
       '/login': (context) => LoginPage(),
-      '/home': (context) => HomePage(),
+      '/home': (context) => Layout(),
   };
 
   Routes() {
@@ -39,7 +39,7 @@ class Routes {
           client: client,
           child: MaterialApp(
             title: "Yakosa",
-            home:  signedIn ? ProfilePage() : LoginPage(),
+            home:  signedIn ? Layout() : LoginPage(),
             routes: routes,
           )
       ));
