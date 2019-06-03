@@ -18,15 +18,14 @@ class SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFEEEEEE),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
-          color: Color(0xFFEEEEEE),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(padding: EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),child: Text("Settings", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0, color: Colors.black))),
-              SizedBox(child: FlatButton(color: Colors.white, child: Row(
+              SizedBox(child: RaisedButton(color: Colors.white, child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text("Delete account"),
