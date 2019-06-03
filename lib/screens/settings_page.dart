@@ -51,8 +51,8 @@ class SettingsPageState extends State<SettingsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Padding(padding: EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),child: Text("Settings", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0, color: Colors.black))),
-              Padding(padding: EdgeInsets.symmetric(horizontal: 15.0), child: Text("Profile", style: TextStyle(fontSize: 15.0, color: Colors.grey))),
+              Padding(padding: EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),child: Text("Settings", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35.0, color: Colors.black))),
+              Padding(padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0), child: Text("Profile", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold))),
               Query(
                 options: QueryOptions(document: query, variables: {"id": 12}),
                 builder: (QueryResult result, { VoidCallback refetch }) {
@@ -66,13 +66,14 @@ class SettingsPageState extends State<SettingsPage> {
                   ProfileData profile = ProfileData.fromMap(result.data['user']);
 
                   return Column(children: [
-                    SettingButton("Firstname: ${profile.firstName}", () {}),
-                    SettingButton("Lastname: ${profile.lastName}", () {}),
-                    SettingButton("Age: ${profile.age ?? "unknown"}", () {}),
+                    SettingButton("${profile.firstName}", () {}, label: "First Name"),
+                    SettingButton("${profile.lastName}", () {}, label: "Last Name"),
+                    SettingButton("${profile.age ?? "unknown"}", () {}, label: "Age"),
                   ]);
                 },
               ),
-              Padding(padding: EdgeInsets.symmetric(horizontal: 15.0), child: Text("Advanced", style: TextStyle(fontSize: 15.0, color: Colors.grey))),
+              Padding(padding: EdgeInsets.all(15.0)),
+              Padding(padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0), child: Text("Advanced", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold))),
               SettingButton("Delete account", () {}, icon: Icons.arrow_right),
             ],
           )
