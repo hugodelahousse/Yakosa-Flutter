@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:yakosa/models/user.dart';
 
 import 'package:yakosa/components/settings_page/setting_button.dart';
 
@@ -8,21 +9,6 @@ class SettingsPage extends StatefulWidget {
 @override
   State<StatefulWidget> createState() {
     return SettingsPageState();
-  }
-}
-
-class ProfileData {
-  final String firstName;
-  final String lastName;
-  final int age;
-  ProfileData({this.firstName, this.lastName, this.age});
-
-  factory ProfileData.fromMap(Map<String, dynamic> parsedMap) {
-    return new ProfileData(
-      firstName: parsedMap['firstName'],
-      lastName: parsedMap['lastName'],
-      age: parsedMap['age'],
-    );
   }
 }
 
@@ -63,7 +49,7 @@ class SettingsPageState extends State<SettingsPage> {
                     return SettingButton("An error occured", () {});
                   }
 
-                  ProfileData profile = ProfileData.fromMap(result.data['user']);
+                  User profile = User.fromJson(result.data['user']);
 
                   return Column(children: [
                     SettingButton("${profile.firstName}", () {}, label: "First Name"),
