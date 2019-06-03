@@ -19,7 +19,7 @@ class LayoutState extends State<Layout> {
     {"page": ProfilePage(), "icon": Icons.account_circle},
     {"page": SettingsPage(), "icon": Icons.settings},
   ];
-  Widget _currentPage = HomePage();
+  int _currentPage = 0;
 
   void initState() {
     super.initState();
@@ -34,7 +34,7 @@ class LayoutState extends State<Layout> {
         top: false,
         child: Scaffold(
           backgroundColor: Color(0xFFFFFFFF),
-          body: _currentPage,
+          body: _screens[_currentPage]["page"],
           bottomNavigationBar: Container(
               decoration: BoxDecoration(
                 border: Border(top: BorderSide(color: Color(0xFFEEEEEE), width: 0.40)),
@@ -45,16 +45,17 @@ class LayoutState extends State<Layout> {
                 elevation: 0,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: _screens.map((x) =>
-                    IconButton(
+                  children: _screens.asMap().map((index, x) =>
+                    MapEntry(index, IconButton(
+                      color: _currentPage == index ? Colors.purple : Colors.black,
                       icon: Icon(x["icon"]),
                       onPressed: () {
                         setState(() {
-                          _currentPage = x["page"];
+                          _currentPage = index;
                         });
                       },
-                    )
-                  ).toList()
+                    ))
+                  ).values.toList()
                 ),
               ),
           )
