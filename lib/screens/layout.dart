@@ -3,7 +3,6 @@ import 'package:yakosa/utils/size_config.dart';
 
 //Screens
 import 'package:yakosa/screens/home_page.dart';
-import 'package:yakosa/screens/profile_page.dart';
 import 'package:yakosa/screens/settings_page.dart';
 
 class Layout extends StatefulWidget {
@@ -16,7 +15,6 @@ class Layout extends StatefulWidget {
 class LayoutState extends State<Layout> {
   final _screens = [
     {"page": HomePage(), "icon": Icons.home},
-    {"page": ProfilePage(), "icon": Icons.account_circle},
     {"page": SettingsPage(), "icon": Icons.settings},
   ];
   Widget _currentPage = HomePage();
