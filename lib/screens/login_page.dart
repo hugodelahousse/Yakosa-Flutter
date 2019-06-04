@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:yakosa/components/login_page/background_overlay.dart';
 import 'package:yakosa/components/login_page/logo.dart';
 import 'package:yakosa/components/login_page/login_slider.dart';
-import 'package:yakosa/components/login_page/sign_in_button.dart';
+import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 
 import 'package:yakosa/utils/auth.dart';
 
@@ -42,14 +42,17 @@ class LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 Logo(100, 'assets/images/yakosa_logo.png'),
                 LoginSlider(),
-                new Column(
+                SizedBox(
+                  width: 300,
+                  child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                  _isLoading ? SignInButton("", Color(0xFFF3465B), Color(0xFFFFFFFF), () {}, true) : 
-                    SignInButton("Sign in with Google", Color(0xFFF3465B), Color(0xFFFFFFFF), _googleConnect, false),
-                  Padding(padding: EdgeInsets.only(top: 10),),
-                  SignInButton("Sign in with Facebook", Color(0xFF3A5997), Color(0xFFFFFFFF), _facebookConnect, false),
+                    GoogleSignInButton(text: 'Sign in with Google', onPressed: _googleConnect,),
+                    Divider(height: 10,),
+                    FacebookSignInButton(text: 'Sign in with Facebook', onPressed: _facebookConnect,),
                   ]
+                ),
                 )
               ],
             ),
