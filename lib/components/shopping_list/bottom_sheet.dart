@@ -32,7 +32,10 @@ class ShoppingListBottomSheet extends StatelessWidget {
               client.mutate(MutationOptions(
                 document: updateQuantityMutation,
                 variables: {'id': _product.id, 'quantity': quantity},
-              )).then((result) => _refresh());
+              )).then((result) {
+                Navigator.pop(context);
+                _refresh();
+              });
             }
         )
     );

@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:yakosa/components/shopping_list/bottom_sheet.dart';
 import 'package:yakosa/components/shopping_list/product_tile.dart';
-import 'package:yakosa/components/shopping_list/quantity_picker.dart';
 import 'package:yakosa/models/product.dart';
 
 
