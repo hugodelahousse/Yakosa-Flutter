@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yakosa/utils/api.dart';
 
 import './screens/login_page.dart';
 import './screens/settings_page.dart';
 import './screens/layout.dart';
 
 import './utils/auth.dart';
+import './utils/graphql.dart';
 
 class Routes {
   final routes = <String, WidgetBuilder>{
@@ -18,26 +17,9 @@ class Routes {
 
   Routes() {
 
-    final HttpLink httpLink = HttpLink(uri: '${Api.baseUrl}/graphql');
-    final AuthLink authLink = AuthLink(
-      getToken: () async {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        return 'JWT ${prefs.getString('token')}';
-      },
-    );
-
-    final Link link = authLink.concat(httpLink as Link);
-
-    final ValueNotifier<GraphQLClient> client = ValueNotifier(
-        GraphQLClient(
-          cache: InMemoryCache(),
-          link: link,
-        )
-    );
-
     Auth.isTokenDefined().then((signedIn) {
       runApp(GraphQLProvider(
-          client: client,
+          client: graphQLCLient,
           child: MaterialApp(
             title: "Yakosa",
             home:  signedIn ? Layout() : LoginPage(),
