@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class Api {
 
-  static String baseUrl = "http://yakosa.herokuapp.com";
+  static String baseUrl = "https://yakosa.herokuapp.com";
 
   static String getUrl() {
     return baseUrl + '/';

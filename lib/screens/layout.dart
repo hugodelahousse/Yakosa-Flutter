@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:yakosa/utils/size_config.dart';
 
 //Screens
-import 'package:yakosa/screens/home_page.dart';
 import 'package:yakosa/screens/settings_page.dart';
+import 'package:yakosa/screens/shopping_lists.dart';
 
 class Layout extends StatefulWidget {
 @override
@@ -14,7 +14,7 @@ class Layout extends StatefulWidget {
 
 class LayoutState extends State<Layout> {
   final _screens = [
-    {"page": HomePage(), "icon": Icons.home},
+    {"page": ShoppingListsPage(), "icon": Icons.shopping_basket},
     {"page": SettingsPage(), "icon": Icons.settings},
   ];
   int _currentPage = 0;
