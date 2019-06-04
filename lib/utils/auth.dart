@@ -32,7 +32,6 @@ class Auth {
               var jsonResponse = await json.decode(server.body);
               await prefs.setString('token', jsonResponse['token']);
               await prefs.setString('refresh', jsonResponse['refresh']);
-              await prefs.setString('googleId', jsonResponse['googleId']);
               _instance.isLoading =  false;
               Navigator.pushReplacementNamed(context, '/home');
             }
@@ -58,7 +57,6 @@ class Auth {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
     await prefs.remove('refresh');
-    await prefs.remove('googleId');
     _googleSignIn.signOut();
     _instance.isLoading =  false;
   }

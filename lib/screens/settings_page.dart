@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yakosa/models/user.dart';
 
 import 'package:yakosa/components/settings_page/setting_button.dart';
@@ -60,11 +62,21 @@ class SettingsPageState extends State<SettingsPage> {
               ),
               Padding(padding: EdgeInsets.all(15.0)),
               Padding(padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0), child: Text("Advanced", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold))),
-              SettingButton("Delete account", () {}, icon: Icons.arrow_right),
+              SettingButton("Sign Out", signOut, icon: Icons.arrow_right),
             ],
           )
         )
       )
     );
+  }
+
+  signOut() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+    await prefs.remove('refresh');
+
+    GoogleSignIn googleSignIn = GoogleSignIn();
+    await googleSignIn.signOut();
+    Navigator.pushReplacementNamed(context, '/login');
   }
 }
