@@ -32,10 +32,12 @@ class Product {
 
 @JsonSerializable()
 class ListProduct {
+  final String id;
   final int quantity;
   final Product product;
 
   ListProduct({
+    this.id,
     this.quantity,
     this.product,
   });

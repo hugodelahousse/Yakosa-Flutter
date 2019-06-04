@@ -3,24 +3,31 @@ import 'package:flutter/widgets.dart';
 import 'package:yakosa/models/product.dart';
 
 class ProductTile extends StatelessWidget {
-  final ListProduct _product;
+  final ListProduct product;
+  final VoidCallback onPressed;
 
-  ProductTile(this._product);
+  ProductTile({
+    @required this.product,
+    this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Image.network(
-        _product.product.info.image_url,
-        width: 100,
-        height: 100,
-        fit: BoxFit.fitHeight,
-      ),
-      title: Text(
-          _product.product.info.product_name_fr,
-          style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-      trailing: Text('${_product.quantity}'),
+    return new GestureDetector(
+      onTap: onPressed,
+        child: ListTile(
+          leading: Image.network(
+            product.product.info.image_url,
+            width: 100,
+            height: 100,
+            fit: BoxFit.fitHeight,
+          ),
+          title: Text(
+            product.product.info.product_name_fr,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          trailing: Text('${product.quantity}x'),
+        )
     );
   }
 }
