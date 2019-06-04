@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:yakosa/screens/profile_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yakosa/utils/api.dart';
 
