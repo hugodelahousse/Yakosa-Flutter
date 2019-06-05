@@ -37,8 +37,9 @@ class LayoutState extends State<Layout> {
               decoration: BoxDecoration(
                 border: Border(top: BorderSide(color: Color(0xFFEEEEEE), width: 0.40)),
               ),
-              height: 58,
+              height: 55,
               alignment: Alignment.center,
+              padding: EdgeInsets.all(0),
               child: BottomAppBar(
                 elevation: 0,
                 child: Row(
