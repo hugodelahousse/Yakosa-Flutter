@@ -54,6 +54,48 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
                ),
                child: IconTheme(data: IconThemeData(color: Colors.purple), child: new Icon(Icons.store)),
              )
+           ),
+           Marker(
+             width: 40.0,
+             height: 40.0,
+             point:  LatLng(48.822372, 2.352175),
+             builder: (ctx) =>
+             Container(
+               decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 5.0)]
+               ),
+               child: IconTheme(data: IconThemeData(color: Colors.purple), child: new Icon(Icons.store)),
+             )
+           ),
+           Marker(
+             width: 40.0,
+             height: 40.0,
+             point:  LatLng(48.813074, 2.361432),
+             builder: (ctx) =>
+             Container(
+               decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 5.0)]
+               ),
+               child: IconTheme(data: IconThemeData(color: Colors.purple), child: new Icon(Icons.store)),
+             )
+           ),
+           Marker(
+             width: 40.0,
+             height: 40.0,
+             point:  LatLng(48.823832, 2.361737),
+             builder: (ctx) =>
+             Container(
+               decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 5.0)]
+               ),
+               child: IconTheme(data: IconThemeData(color: Colors.purple), child: new Icon(Icons.store)),
+             )
            )
          ]
        )
