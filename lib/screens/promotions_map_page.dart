@@ -19,7 +19,7 @@ class PromotionsMapPage extends StatefulWidget {
 
 class PromotionsMapPageState extends State<PromotionsMapPage> {
   GoogleMapController _controller;
-  var userLocation = LatLng(48.853188, 2.349213);
+  var centerLocation = LatLng(48.853188, 2.349213);
 
   var _location = location.Location();
 
@@ -55,7 +55,7 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
     super.initState();
     _location.getLocation().then((value) {
       setState(() {
-        userLocation = LatLng(value.latitude, value.longitude);
+        centerLocation = LatLng(value.latitude, value.longitude);
       });
     });
     if (mapIcon == null) {
@@ -69,9 +69,12 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
   Widget build(BuildContext context) {
     return GoogleMap(
       initialCameraPosition: CameraPosition(
-        target: userLocation,
+        target: centerLocation,
         zoom: 14),
+      minMaxZoomPreference: MinMaxZoomPreference(13, 16),
+      tiltGesturesEnabled: false,
       onMapCreated: _onMapCreated,
+      onCameraIdle: _onCameraIdle,
       onCameraMove: _onCameraMove,
       compassEnabled: true,
       myLocationButtonEnabled: true,
@@ -84,11 +87,14 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
     setState(() {
       _controller = controller;
     });
-    //fetchStores(userLocation.longitude, userLocation.latitude, "10000", 100);
+  }
+
+  _onCameraIdle() {
+    fetchStores(centerLocation.longitude, centerLocation.latitude, "3000", 100);
   }
 
   _onCameraMove(CameraPosition position) {
-    fetchStores(position.target.longitude, position.target.latitude, "3000", 100);
+    centerLocation = LatLng(position.target.latitude, position.target.longitude);
   }
 
   _onTapMarker(String id) {
@@ -110,15 +116,17 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
         List stores = result.data['nearbyStore'];
         var newMarkers = Map<String, Marker>();
         stores.forEach((s) {
-          var marker = Marker(
-            markerId: MarkerId(s['id']),
-            position: LatLng(s['position']['coordinates'][1], s['position']['coordinates'][0]),
-            icon: mapIcon,
-            onTap: () => _onTapMarker(s['id']));
-          newMarkers.putIfAbsent(s['id'], () => marker);
+          if (!markers.containsKey(s['id'])) {
+            var marker = Marker(
+              markerId: MarkerId(s['id']),
+              position: LatLng(s['position']['coordinates'][1], s['position']['coordinates'][0]),
+              icon: mapIcon,
+              onTap: () => _onTapMarker(s['id']));
+            newMarkers.putIfAbsent(s['id'], () => marker);
+          }
         });
         setState(() {
-            markers = newMarkers;
+            markers.addAll(newMarkers);
         });
       }
     });
