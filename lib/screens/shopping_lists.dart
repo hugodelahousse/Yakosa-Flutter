@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:yakosa/components/shopping_lists/shopping_lists_item.dart';
 import 'package:yakosa/models/shopping_list.dart';
 import 'package:yakosa/screens/shopping_list.dart';
 
@@ -42,43 +43,7 @@ class ShoppingListsPage extends StatelessWidget {
                     itemCount: lists.length,
                     itemBuilder: (context, index) {
                       final list = ShoppingList.fromJson(lists[index]);
-                      return Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                        child: GestureDetector(
-                          child: Container(
-                            height: 100,
-                            padding: EdgeInsets.all(15),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                              color: Colors.orangeAccent,
-                              boxShadow: [BoxShadow(color: Color(0x40000000), blurRadius: 5, spreadRadius: 2)],
-                              gradient: LinearGradient(
-                                begin: FractionalOffset.topLeft,
-                                end: FractionalOffset.bottomRight,
-                                colors: [
-                                  Color(0xFF780B7C).withOpacity(0.75),
-                                  Color(0xFF780B7C),
-                                ],
-                                stops: [
-                                  0.0,
-                                  0.5
-                                ]),
-                              ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text("Shopping List ${list.id}",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.white))
-                              ],
-                            )
-                          ),
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => ShoppingListPage(
-                              shoppingListId: list.id,
-                            )),
-                          ),
-                        )
-                      );
+                      return ShoppingListsItem(list.id, Color(0xFF780B7C), "Shopping List ${list.id}", list.products.length);
                     }
                   )
                 );
