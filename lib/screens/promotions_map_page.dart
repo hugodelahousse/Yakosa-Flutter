@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:yakosa/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,8 +19,8 @@ class PromotionsMapPage extends StatefulWidget {
 }
 
 class PromotionsMapPageState extends State<PromotionsMapPage> {
-  GoogleMapController _controller;
   var centerLocation = LatLng(48.853188, 2.349213);
+  LatLng lastFetchLocation;
 
   var _location = location.Location();
 
@@ -67,30 +68,22 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      initialCameraPosition: CameraPosition(
-        target: centerLocation,
-        zoom: 14),
-      minMaxZoomPreference: MinMaxZoomPreference(13, 16),
-      tiltGesturesEnabled: false,
-      onMapCreated: _onMapCreated,
-      onCameraIdle: _onCameraIdle,
-      onCameraMove: _onCameraMove,
-      compassEnabled: true,
-      myLocationButtonEnabled: true,
-      myLocationEnabled: true,
-      markers: Set<Marker>.of(markers.values),
-    );
-  }
-
-  _onMapCreated(GoogleMapController controller) {
-    setState(() {
-      _controller = controller;
-    });
-  }
-
-  _onCameraIdle() {
-    fetchStores(centerLocation.longitude, centerLocation.latitude, "3000", 100);
+    return Stack(children: <Widget>[
+      GoogleMap(
+        initialCameraPosition: CameraPosition(
+          target: centerLocation,
+          zoom: 14),
+        minMaxZoomPreference: MinMaxZoomPreference(13, 16),
+        tiltGesturesEnabled: false,
+        onCameraIdle: _onCameraIdle,
+        onCameraMove: _onCameraMove,
+        compassEnabled: true,
+        myLocationButtonEnabled: true,
+        myLocationEnabled: true,
+        markers: Set<Marker>.of(markers.values),
+      ),
+      Center(child: Icon(Icons.center_focus_strong)),
+    ]);
   }
 
   _onCameraMove(CameraPosition position) {
@@ -102,6 +95,7 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
   }
 
   fetchStores(double long, double lat, String dist, int limit) {
+    lastFetchLocation = LatLng(lat, long);
     graphQLCLient.value.query(
       QueryOptions(
         document: fetchNearbyStores,
@@ -126,9 +120,21 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
           }
         });
         setState(() {
-            markers.addAll(newMarkers);
+            markers = newMarkers;
         });
       }
     });
   }
+
+  _onCameraIdle() {
+    var distance = 1.0;
+    if (lastFetchLocation != null)
+      distance = LatLngDistance(lastFetchLocation.latitude,
+                                    lastFetchLocation.longitude,
+                                    centerLocation.latitude,
+                                    centerLocation.longitude);
+    if (distance >= 0.1)
+      fetchStores(centerLocation.longitude, centerLocation.latitude, "500", 200);
+  }
+
 }
