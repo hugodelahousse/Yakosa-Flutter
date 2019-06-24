@@ -12,6 +12,15 @@ Mobile application for Yakosa Project, using Flutter Framework (DART).
 * common/ : Contains every UI components used in more than one screen or component
 * utils/ : Every files needed for computing/processing
 
+## Generate the GraphQL types
+
+Modify the `codegen.yml` to point to your graphql schema and run:
+```
+$ yarn install
+$ yarn generate
+```
+
+
 ## Launch the app !
 
 From the root of the project :

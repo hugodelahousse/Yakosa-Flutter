@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:yakosa/models/shopping_list.dart';
+import 'package:yakosa/models/graphql.dart';
 import 'package:yakosa/screens/shopping_list.dart';
 
 class ShoppingListsPage extends StatelessWidget {

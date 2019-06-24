@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:yakosa/models/product.dart';
+import 'package:yakosa/models/graphql.dart';
 
 class ProductTile extends StatelessWidget {
   final ListProduct product;
