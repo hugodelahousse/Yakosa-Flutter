@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:yakosa/models/product.dart';
+import 'package:yakosa/models/graphql.dart';
 
 class QuantityPicker extends StatefulWidget {
   final ListProduct product;

@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:graphql/client.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:yakosa/components/shopping_list/quantity_picker.dart';
-import 'package:yakosa/models/product.dart';
+import 'package:yakosa/models/graphql.dart';
 
 class ShoppingListBottomSheet extends StatelessWidget {
   final ListProduct _product;

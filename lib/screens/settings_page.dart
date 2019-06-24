@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yakosa/models/user.dart';
+import 'package:yakosa/models/graphql.dart';
 
 import 'package:yakosa/components/settings_page/setting_button.dart';
 
