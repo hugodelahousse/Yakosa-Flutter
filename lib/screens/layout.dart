@@ -31,7 +31,7 @@ class LayoutState extends State<Layout> {
       child: SafeArea(
         top: false,
         child: Scaffold(
-          backgroundColor: Color(0xFFFFFFFF),
+          backgroundColor: Colors.white,
           body: _screens[_currentPage]["page"],
           bottomNavigationBar: Container(
               decoration: BoxDecoration(
