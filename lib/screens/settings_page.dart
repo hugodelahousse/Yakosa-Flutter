@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yakosa/models/user.dart';
 
-import 'package:yakosa/components/settings_page/setting_button.dart';
+import 'package:yakosa/components/settings_page/settings_group.dart';
+import 'package:yakosa/components/settings_page/setting_item.dart';
 
 class SettingsPage extends StatefulWidget {
 @override
@@ -32,39 +32,63 @@ class SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(padding: EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),child: Text("Settings", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35.0, color: Colors.black))),
-              Padding(padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0), child: Text("Profile", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold))),
-              Query(
-                options: QueryOptions(document: query, variables: {"id": 12}),
-                builder: (QueryResult result, { VoidCallback refetch }) {
-                  if (result.loading) {
-                    return Center(child: CircularProgressIndicator(backgroundColor: Colors.purple));
-                  }
-                  if (result.data == null || result.data['user'] == null) {
-                    return SettingButton("An error occured", () {});
-                  }
+    return CupertinoPageScaffold(
+      child: Container(
+        color: Color(0xFFEFEFF4),
+        child: CustomScrollView(
+          slivers: <Widget>[
+            CupertinoSliverNavigationBar(
+              largeTitle: Text('Settings'),
+            ),
+            SliverSafeArea(
+              top: false,
+              sliver: SliverList(
+                delegate: SliverChildListDelegate(
+                  <Widget>[
+                    SettingsGroup(
+                      [
+                        Query(
+                          options: QueryOptions(document: query, variables: {"id": 12}),
+                          builder: (QueryResult result, { VoidCallback refetch }) {
+                            if (result.loading) {
+                              return SettingItem(
+                                'Name',
+                              );
+                            }
+                            if (result.data == null || result.data['user'] == null) {
+                              return SettingItem(
+                                'Name',
+                                value: 'An error occured',
+                              );
+                            }
 
-                  User profile = User.fromJson(result.data['user']);
+                            User profile = User.fromJson(result.data['user']);
 
-                  return Column(children: [
-                    SettingButton("${profile.firstName}", () {}, label: "First Name"),
-                    SettingButton("${profile.lastName}", () {}, label: "Last Name"),
-                    SettingButton("${profile.age ?? "unknown"}", () {}, label: "Age"),
-                  ]);
-                },
+                            return SettingItem(
+                              'Name',
+                              value: '${profile.firstName} ${profile.lastName}',
+                            );
+                          },
+                        ),
+                      ],
+                      label: Text('Profile'),
+                    ),
+                    SettingsGroup(
+                      [
+                        SettingItem(
+                          'Sign Out',
+                          hasAction: true,
+                          action: signOut,
+                        )
+                      ],
+                      label: Text('Advanced'),
+                    )
+
+                  ]
+                ),
               ),
-              Padding(padding: EdgeInsets.all(15.0)),
-              Padding(padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0), child: Text("Advanced", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold))),
-              SettingButton("Sign Out", signOut, icon: Icons.arrow_right),
-            ],
-          )
+            )
+          ],
         )
       )
     );
