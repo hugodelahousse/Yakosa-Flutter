@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import './screens/login_page.dart';
@@ -21,7 +22,12 @@ class Routes {
       runApp(GraphQLProvider(
           client: graphQLCLient,
           child: CupertinoApp(
+            localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+              DefaultMaterialLocalizations.delegate,
+              DefaultWidgetsLocalizations.delegate,
+            ],
             title: "Yakosa",
+            debugShowCheckedModeBanner: false,
             home:  signedIn ? Layout() : LoginPage(),
             routes: routes,
           )
