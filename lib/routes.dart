@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import './screens/login_page.dart';
@@ -20,7 +20,7 @@ class Routes {
     Auth.isTokenDefined().then((signedIn) {
       runApp(GraphQLProvider(
           client: graphQLCLient,
-          child: MaterialApp(
+          child: CupertinoApp(
             title: "Yakosa",
             home:  signedIn ? Layout() : LoginPage(),
             routes: routes,
