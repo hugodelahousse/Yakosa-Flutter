@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -34,37 +37,70 @@ class ShoppingListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Query(
-          options: QueryOptions(
-            document: fetchShoppingList,
-            variables: { "id": shoppingListId },
+    return CupertinoPageScaffold(
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            backgroundColor: Color(0xFF780B7C),
+            expandedHeight: 180.0,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text("Shopping List ${this.shoppingListId}"),
+              background: Image.asset('assets/images/yakosa_login.jpg', fit: BoxFit.cover),
+            ),
+            actions: <Widget>[
+              IconButton(
+                padding: EdgeInsets.only(bottom: 10),
+                icon: Icon(CupertinoIcons.add_circled_solid, size: 35),
+                onPressed: () => print('ADD'),
+              )
+            ],
           ),
-          builder: (QueryResult result, { VoidCallback refetch }) {
-            if (result.errors != null) {
-              return Text(result.errors.toString());
-            }
-            if (result.loading) {
-              return Center(child: CircularProgressIndicator());
-            }
-            List products = result.data['shoppingList']['products'];
-            return ListView.separated(
-              separatorBuilder: (context, index) => const Divider(),
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                final product = ListProduct.fromJson(products[index]);
-                return ProductTile(
-                  product: product,
-                  onPressed: () => showModalBottomSheet(
-                    context: context,
-                    builder: (context) =>
-                        ShoppingListBottomSheet(product, refetch),
-                  ),
+          Query(
+            options: QueryOptions(
+              document: fetchShoppingList,
+              variables: { "id": shoppingListId },
+            ),
+            builder: (QueryResult result, { VoidCallback refetch }) {
+              if (result.errors != null) {
+                return SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      Text(result.errors.toString()),
+                    ]
+                  )
                 );
-              },
-            );
-          },
-        )
+              }
+              if (result.loading) {
+                return SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      Center(child: CircularProgressIndicator()),
+                    ]
+                  )
+                );
+              }
+              List products = result.data['shoppingList']['products'];
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final product = ListProduct.fromJson(products[index]);
+                    return ProductTile(
+                      product: product,
+                      onPressed: () => showModalBottomSheet(
+                        context: context,
+                        builder: (context) =>
+                            ShoppingListBottomSheet(product, refetch),
+                      ),
+                    );
+                  },
+                  childCount: products.length,
+                ),
+              );
+            },
+          )
+        ],
+      ),
     );
   }
 }
