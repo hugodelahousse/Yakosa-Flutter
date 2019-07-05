@@ -73,7 +73,10 @@ class ShoppingListsPageState extends State<ShoppingListsPage> {
             top: false,
             sliver: loading ?
               SliverToBoxAdapter(
-                child: Center(child: CircularProgressIndicator())
+                child: Padding(
+                  padding: EdgeInsets.only(top: 50),
+                  child: Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.purple)))
+                )
               )
             : (shoppingLists.length > 0 ?
                 SliverList(
