@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:yakosa/components/shopping_list/bottom_sheet.dart';
 import 'package:yakosa/components/shopping_list/product_tile.dart';
+import 'package:yakosa/components/shopping_list/search_page.dart';
 import 'package:yakosa/models/product.dart';
 
 
@@ -63,7 +64,10 @@ class ShoppingListPage extends StatelessWidget {
               IconButton(
                 padding: EdgeInsets.only(bottom: 10),
                 icon: Icon(CupertinoIcons.add_circled_solid, size: 35),
-                onPressed: () => print('ADD'),
+                onPressed: () => Navigator.push(context, CupertinoPageRoute(
+                  fullscreenDialog: true,
+                  builder: (BuildContext context) => SearchPage(),
+                )),
               )
             ],
           ),
