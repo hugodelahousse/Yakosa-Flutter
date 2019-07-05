@@ -25,11 +25,11 @@ class ShoppingListsItem extends StatelessWidget {
               end: FractionalOffset.bottomRight,
               colors: [
                 _color,
-                _color.withOpacity(0.90),
+                _color.withRed(180),
               ],
               stops: [
                 0.0,
-                0.5
+                0.9
               ]),
             ),
           child: Row(
