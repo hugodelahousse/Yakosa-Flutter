@@ -6,6 +6,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:yakosa/components/shopping_lists/shopping_lists_item.dart';
 import 'package:yakosa/models/shopping_list.dart';
 import 'package:yakosa/utils/graphql.dart';
+import 'package:yakosa/components/common/simple_cupertino_modal.dart';
 
 class ShoppingListsPage extends StatefulWidget {
   @override
@@ -36,6 +37,12 @@ class ShoppingListsPageState extends State<ShoppingListsPage> {
         id
       }
     }
+  }
+  """;
+
+  static const removeShoppingList = r"""
+  mutation removeShoppingList($id: ID!) {
+    deleteList(id: $id)
   }
   """;
 
@@ -72,7 +79,19 @@ class ShoppingListsPageState extends State<ShoppingListsPage> {
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      return ShoppingListsItem(shoppingLists[index].id, Color(0xFF780B7C), "Shopping List ${shoppingLists[index].id}", shoppingLists[index].products.length);
+                      return Dismissible(
+                        key: Key(UniqueKey().toString()),
+                        onDismissed: (direction) => removeList(shoppingLists[index], index),
+                        confirmDismiss: (direction) async {
+                          final bool res = await showDialog(
+                            context: context,
+                            builder: (BuildContext context) =>
+                              SimpleCupertinoModal('Remove list', 'Are you sure to remove this list ?', 'Remove List', () => Navigator.of(context).pop(true))
+                          );
+                          return res;
+                        },
+                        child: ShoppingListsItem(shoppingLists[index].id, Color(0xFF780B7C), "Shopping List ${shoppingLists[index].id}", shoppingLists[index].products.length),
+                      );
                     },
                     childCount: shoppingLists.length,
                   ),
@@ -112,14 +131,30 @@ class ShoppingListsPageState extends State<ShoppingListsPage> {
   }
 
   createList() {
-    graphQLCLient.value.query(
-      QueryOptions(document: shoppingListCreateMutation),
+    graphQLCLient.value.mutate(
+      MutationOptions(document: shoppingListCreateMutation),
     ).then((result) {
       if (result.errors == null && result.data != null) {
         ShoppingList sl = ShoppingList.fromJson(result.data['createList']);
         setState(() {
           shoppingLists.add(sl);
         });
+      }
+    });
+  }
+
+  removeList(ShoppingList sl, int index) {
+    setState(() {
+      shoppingLists.removeAt(index);
+    });
+    graphQLCLient.value.mutate(
+      MutationOptions(
+        document: removeShoppingList,
+        variables: {'id': sl.id},
+      ),
+    ).then((result) {
+      if (result.errors == null && result.data != null) {
+        Scaffold.of(context).showSnackBar(SnackBar(content: Text("List removed"), duration: Duration(seconds: 1),));
       }
     });
   }
