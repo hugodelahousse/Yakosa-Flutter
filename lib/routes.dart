@@ -23,8 +23,8 @@ class Routes {
           client: graphQLCLient,
           child: CupertinoApp(
             localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-              DefaultMaterialLocalizations.delegate,
-              DefaultWidgetsLocalizations.delegate,
+                DefaultMaterialLocalizations.delegate,
+                DefaultWidgetsLocalizations.delegate,
             ],
             title: "Yakosa",
             debugShowCheckedModeBanner: false,
