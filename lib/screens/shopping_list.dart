@@ -43,7 +43,18 @@ class ShoppingListPage extends StatelessWidget {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: Text("Shopping List ${this.shoppingListId}"),
-              background: Image.asset('assets/images/yakosa_login.jpg', fit: BoxFit.cover),
+              background: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: FractionalOffset.topLeft,
+                    end: FractionalOffset.bottomRight,
+                    colors: [
+                      Color(0xFF780B7C),
+                      Color(0xFF780B7C).withRed(200),
+                    ],
+                  )
+                )
+              ),
             ),
             actions: <Widget>[
               IconButton(
