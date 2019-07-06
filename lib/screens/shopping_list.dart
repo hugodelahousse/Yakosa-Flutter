@@ -90,7 +90,7 @@ class ShoppingListPage extends StatelessWidget {
                 return SliverList(
                   delegate: SliverChildListDelegate(
                     [
-                      Center(child: CircularProgressIndicator()),
+                      Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.purple))),
                     ]
                   )
                 );
