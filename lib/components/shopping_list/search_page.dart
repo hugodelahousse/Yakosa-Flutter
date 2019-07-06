@@ -68,13 +68,13 @@ class SearchPageState extends State<SearchPage> {
                     ),
                   ),
                   Flexible(child:
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(products[index].product_fr, style: TextStyle(fontWeight: FontWeight.bold), softWrap: true,),
-                      Text(products[index].brands, softWrap: true,)
-                    ],
-                  )
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(products[index].product_fr, style: TextStyle(fontWeight: FontWeight.bold), softWrap: true,),
+                        Text(products[index].brands, softWrap: true,)
+                      ],
+                    )
                   )
                 ],
               ),
