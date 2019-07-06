@@ -18,7 +18,7 @@ class Api {
   }
 
   static Future<http.Response> searchProduct(String terms) async {
-    return await http.get('https://world.openfoodfacts.org/cgi/search.pl?search_terms=$terms&search_simple=1&action=process&json=1&page_size=20',
+    return await http.get('https://world.openfoodfacts.org/cgi/search.pl?search_terms=$terms&search_simple=1&action=process&json=1&page_size=40&sort_by=unique_scan_n',
       headers: { 'User-Agent': 'Yakosa - IOS - Version 1.0'});
   }
 }
