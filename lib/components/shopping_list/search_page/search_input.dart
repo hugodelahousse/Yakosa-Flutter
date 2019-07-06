@@ -33,6 +33,7 @@ class SearchInputState extends State<SearchInput> {
   }
 
   _onTextChanged() {
+    if (!this.mounted) return;
     widget._onTextChanged(_controller.text);
     setState(() {
       showClearIcon = _controller.text.length > 0;
