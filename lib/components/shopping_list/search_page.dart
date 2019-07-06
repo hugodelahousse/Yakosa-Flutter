@@ -36,7 +36,8 @@ class SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CupertinoNavigationBar(
-        leading: GestureDetector(child: Row(mainAxisAlignment: MainAxisAlignment.center, mainAxisSize: MainAxisSize.min,children: <Widget>[ Text('Close', style: TextStyle(color: CupertinoColors.activeBlue))]), onTap: () => Navigator.of(context).pop(selected)),
+        padding: EdgeInsetsDirectional.only(start: 10),
+        leading: GestureDetector(child: Row(mainAxisAlignment: MainAxisAlignment.center, mainAxisSize: MainAxisSize.min,children: <Widget>[ Text('Close', style: TextStyle(color: CupertinoColors.activeBlue, fontSize: 20))]), onTap: () => Navigator.of(context).pop(selected)),
         backgroundColor: Colors.white.withOpacity(0),
         middle: SearchInput(searchProducts),
       ),
@@ -67,13 +68,13 @@ class SearchPageState extends State<SearchPage> {
                     ),
                   ),
                   Flexible(child:
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(products[index].product_fr, style: TextStyle(fontWeight: FontWeight.bold), softWrap: true,),
-                      Text(products[index].brands, softWrap: true,)
-                    ],
-                  )
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(products[index].product_fr, style: TextStyle(fontWeight: FontWeight.bold), softWrap: true,),
+                        Text(products[index].brands, softWrap: true,)
+                      ],
+                    )
                   )
                 ],
               ),
@@ -113,6 +114,7 @@ class SearchPageState extends State<SearchPage> {
   }
 
   searchProducts(String terms) async {
+    terms = Uri.encodeFull(terms.trim());
     if (terms.length < 3) {
       if (this.mounted) {
         setState(() {
