@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class SearchPage extends StatefulWidget {
 
 class SearchPageState extends State<SearchPage> {
   List<OpenFoodFactsProduct> products = [];
+  Map<String, int> selected = {};
   bool loading = false;
 
   @override
@@ -34,6 +36,7 @@ class SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CupertinoNavigationBar(
+        leading: GestureDetector(child: Row(mainAxisAlignment: MainAxisAlignment.center, mainAxisSize: MainAxisSize.min,children: <Widget>[ Text('Close', style: TextStyle(color: CupertinoColors.activeBlue))]), onTap: () => Navigator.of(context).pop(selected)),
         backgroundColor: Colors.white.withOpacity(0),
         middle: SearchInput(searchProducts),
       ),
@@ -44,6 +47,7 @@ class SearchPageState extends State<SearchPage> {
         separatorBuilder: (context, index) => Divider(height: 1, color: Colors.grey),
         itemCount: products.length,
         itemBuilder: (context, index) {
+          final quantity = selected.containsKey(products[index].barcode) ? selected[products[index].barcode] : 0;
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -79,16 +83,16 @@ class SearchPageState extends State<SearchPage> {
                 children: <Widget>[
                   IconButton(
                     icon: Icon(Icons.remove_circle_outline, color: Color(0xff9c88ff),),
-                    onPressed: () => print('Decrease'),
+                    onPressed: () => _decreaseProduct(products[index].barcode)
                   ),
                   Text(
-                    "6",
+                    quantity.toString(),
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 18),
                   ),
                   IconButton(
                     icon: Icon(Icons.add_circle_outline, color: Color(0xff9c88ff),),
-                    onPressed:() => print('Increase'),
+                    onPressed:() => _increaseProduct(products[index].barcode)
                   )
                 ],
               ),
@@ -97,6 +101,15 @@ class SearchPageState extends State<SearchPage> {
         },
       ))
     );
+  }
+
+  _increaseProduct(String barcode) {
+    if (selected.containsKey(barcode) && this.mounted) setState(() => selected[barcode]++);
+    else if (this.mounted) setState(() => selected.putIfAbsent(barcode, () => 1));
+  }
+
+  _decreaseProduct(String barcode) {
+    if (selected.containsKey(barcode) && this.mounted) setState(() => selected[barcode] = max(0, selected[barcode] - 1));
   }
 
   searchProducts(String terms) async {
