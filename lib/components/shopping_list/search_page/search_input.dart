@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class SearchInput extends StatefulWidget {
   final Function _onTextChanged;
@@ -45,7 +46,7 @@ class SearchInputState extends State<SearchInput> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(8)),
-        color: CupertinoColors.lightBackgroundGray.withOpacity(0.5)
+        color: CupertinoColors.lightBackgroundGray.withOpacity(0.6)
       ),
       padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       child: Row(
@@ -56,6 +57,10 @@ class SearchInputState extends State<SearchInput> {
           ),
           Expanded(
             child: CupertinoTextField(
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                border: Border(),
+              ),
               controller: _controller,
               focusNode: _focusNode,
             )
