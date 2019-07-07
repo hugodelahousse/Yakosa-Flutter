@@ -25,11 +25,11 @@ class ShoppingListsItem extends StatelessWidget {
               end: FractionalOffset.bottomRight,
               colors: [
                 _color,
-                _color.withOpacity(0.90),
+                _color.withRed(180),
               ],
               stops: [
                 0.0,
-                0.5
+                0.9
               ]),
             ),
           child: Row(
@@ -45,10 +45,12 @@ class ShoppingListsItem extends StatelessWidget {
                   ),
                 child: Text(_count.toString(), style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold))
               ),
-              Container(
-                child: Text(_title,style: TextStyle(fontWeight: FontWeight.w100, fontSize: 20.0, color: Colors.white)),
-                alignment: Alignment.center,
-              ),
+              Flexible(
+                child: Container(
+                  padding: EdgeInsetsDirectional.only(start: 5),
+                  child: Text(_title, style: TextStyle(fontWeight: FontWeight.w100, fontSize: 24.0, color: Colors.white)),
+                  alignment: Alignment.center,
+                )),
               Container(
                 child: Icon(Icons.chevron_right, color: Colors.white, size: 40),
                 padding: EdgeInsets.only(right: 10),
