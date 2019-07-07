@@ -62,6 +62,7 @@ class ShoppingListsPageState extends State<ShoppingListsPage> {
       child: CustomScrollView(
         slivers: <Widget>[
           CupertinoSliverNavigationBar(
+            key: UniqueKey(),
             largeTitle: Text('Shopping Lists'),
             trailing: IconButton(
               padding: EdgeInsets.only(bottom: 10),
