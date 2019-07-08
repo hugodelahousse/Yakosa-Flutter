@@ -31,7 +31,7 @@ class ShoppingListsPageState extends State<ShoppingListsPage> {
 
   static const shoppingListCreateMutation = r"""
   mutation createList {
-    createList {
+    createList(name: "test") {
       id,
       products {
         id

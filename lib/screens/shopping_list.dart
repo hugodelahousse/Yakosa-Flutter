@@ -31,6 +31,7 @@ class ShoppingListPageState extends State<ShoppingListPage> {
   static const fetchShoppingList = r"""
   query ShoppingList($id: ID!){
 	  shoppingList(id: $id){
+      id
 	    products {
 	      id
         quantity
@@ -46,17 +47,24 @@ class ShoppingListPageState extends State<ShoppingListPage> {
   """;
 
   static const addProductsToList = r"""
-  mutation addListProduct($list: ID!, $product: ID!, $quantity: Int!) {
-    addListProduct(list: $list, product: $id, quantity: $quantity) {
+  mutation addListProduct($list: ID!, $barcode: String, $quantity: Int, $unit: MeasuringUnits!) {
+    addListProductWithbarcode(list: $list, barcode: $barcode, quantity: $quantity, unit: $unit) {
       id
     }
   }
   """;
 
-  _fetchProducts() {
+  @override
+  void initState() {
+    super.initState();
+    _fetchProducts(true);
+  }
+
+  _fetchProducts(bool withCache) {
     setState(() => loading = true);
     graphQLCLient.value.query(
       QueryOptions(
+        fetchPolicy: withCache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
         document: fetchShoppingList,
         variables: { "id": widget.shoppingListId },
       )
@@ -68,6 +76,8 @@ class ShoppingListPageState extends State<ShoppingListPage> {
           tmpList.add(ListProduct.fromJson(list[i]));    
         }
         setState(() => products = tmpList);
+      } else {
+        print(result.errors.toString());
       }
       setState(() => loading = false);
     });
@@ -75,20 +85,18 @@ class ShoppingListPageState extends State<ShoppingListPage> {
 
   _addProduct(String productId, int quantity) {
     if (quantity <= 0) return;
-    print('adding ' + productId + ' with quantity ' + quantity.toString());
-    /*graphQLCLient.value.mutate(
+    graphQLCLient.value.mutate(
       MutationOptions(
         document: addProductsToList,
-        variables: {'list': widget.shoppingListId, 'product': productId, 'quantity': quantity }
+        variables: {'list': widget.shoppingListId, 'barcode': productId, 'quantity': quantity, 'unit': 'UNIT' }
       ),
     ).then((result) {
       if (result.errors == null && result.data != null) {
-        ListProduct lp = ListProduct.fromJson(result.data['addListProduct']);
-        setState(() {
-          products.add(lp);
-        });
+        _fetchProducts(false);
+      } else {
+        print(result.errors.toString());
       }
-    });*/
+    });
   }
 
   @override
@@ -124,55 +132,39 @@ class ShoppingListPageState extends State<ShoppingListPage> {
                     fullscreenDialog: true,
                     builder: (BuildContext context) => SearchPage(),
                   ));
-                  print(result);
                   result.forEach((p, q) => _addProduct(p, q));
                 }
               )
             ],
           ),
-          Query(
-            options: QueryOptions(
-              document: fetchShoppingList,
-              variables: { "id": widget.shoppingListId },
-            ),
-            builder: (QueryResult result, { VoidCallback refetch }) {
-              if (result.errors != null) {
-                return SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      Text(result.errors.toString()),
-                    ]
-                  )
-                );
-              }
-              if (result.loading) {
-                return SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.purple))),
-                    ]
-                  )
-                );
-              }
-              List products = result.data['shoppingList']['products'];
-              return SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final product = ListProduct.fromJson(products[index]);
-                    return ProductTile(
-                      product: product,
-                      onPressed: () => showModalBottomSheet(
+          loading ? SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.only(top: 50),
+                child: Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.purple)))
+              )
+            ) : ((products.length > 0) ? SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return ProductTile(
+                    product: products[index],
+                    onPressed: () async { 
+                      final bool result = await showModalBottomSheet(
                         context: context,
                         builder: (context) =>
-                            ShoppingListBottomSheet(product, refetch),
-                      ),
-                    );
-                  },
-                  childCount: products.length,
-                ),
-              );
-            },
-          )
+                          ShoppingListBottomSheet(products[index]),
+                      );
+                      if (result != null && result) { _fetchProducts(false); }
+                    });
+                },
+                childCount: products.length,
+              ),
+            ) : SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.only(top: 50),
+                child: Center(child: Text("No products :(", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.grey)))
+                ) 
+              )
+            )
         ],
       ),
     );
