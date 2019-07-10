@@ -19,7 +19,8 @@ class ShoppingListBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GraphQLConsumer(
+    return SafeArea(
+      child: GraphQLConsumer(
         builder: (client) => QuantityPicker(
             product: _product,
             onUpdateQuantity: (quantity) {
@@ -28,14 +29,20 @@ class ShoppingListBottomSheet extends StatelessWidget {
                 Navigator.pop(context, false);
                 return;
               }
-              client.mutate(MutationOptions(
+              client
+                  .mutate(MutationOptions(
                 document: updateQuantityMutation,
-                variables: {'id': _product.id, 'quantity': quantity, 'unit': 'UNIT'},
-              )).then((result) {
+                variables: {
+                  'id': _product.id,
+                  'quantity': quantity,
+                  'unit': 'UNIT'
+                },
+              ))
+                  .then((result) {
                 Navigator.pop(context, true);
               });
-            }
-        )
+            }),
+      ),
     );
   }
 }
