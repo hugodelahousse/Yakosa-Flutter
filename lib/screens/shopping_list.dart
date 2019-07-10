@@ -24,7 +24,7 @@ class ShoppingListPage extends StatefulWidget {
 }
 
 class ShoppingListPageState extends State<ShoppingListPage> {
-  List<ListProduct> products;
+  List<ListProduct> products = List();
   bool loading = false;
 
 
