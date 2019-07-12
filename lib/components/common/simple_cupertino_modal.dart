@@ -3,17 +3,20 @@ import 'package:flutter/widgets.dart';
 
 class SimpleCupertinoModal extends StatelessWidget {
   final String _title;
-  final String _description;
+  final Widget _content;
   final String _successButton;
   final Function() _callback;
 
-  SimpleCupertinoModal(this._title, this._description, this._successButton, this._callback);
+  SimpleCupertinoModal(this._title, this._content, this._successButton, this._callback);
 
   @override
   Widget build(BuildContext context) {
     return CupertinoAlertDialog(
       title: Text(_title),
-      content: Text(_description),
+      content: Padding(
+        padding: const EdgeInsets.only(top: 10.0),
+        child: _content,
+      ),
       actions: <Widget>[
         CupertinoDialogAction(
           isDefaultAction: true,
