@@ -16,4 +16,9 @@ class Api {
   static Future<http.Response> getNewToken(String token) async {
     return await http.post(getUrl() + 'auth/token/refresh', headers: {'Content-Type': 'application/json; charset=utf-8'}, body: json.encode({'refresh_token': token}));
   }
+
+  static Future<http.Response> searchProduct(String terms) async {
+    return await http.get('https://world.openfoodfacts.org/cgi/search.pl?search_terms=$terms&search_simple=1&action=process&json=1&page_size=40&sort_by=unique_scan_n',
+      headers: { 'User-Agent': 'Yakosa - IOS - Version 1.0'});
+  }
 }

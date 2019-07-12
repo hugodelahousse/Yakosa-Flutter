@@ -6,38 +6,43 @@ import 'package:yakosa/models/product.dart';
 
 class ShoppingListBottomSheet extends StatelessWidget {
   final ListProduct _product;
-  final VoidCallback _refresh;
 
   static const updateQuantityMutation = r"""
-  mutation updateQuantity($id: ID!, $quantity: Int!) {
-    updateListProduct(id: $id, quantity: $quantity) {
+  mutation updateQuantity($id: ID!, $quantity: Int!, $unit: MeasuringUnits!) {
+    updateListProduct(id: $id, quantity: $quantity, unit: $unit) {
       id
     }
   }
   """;
 
-  ShoppingListBottomSheet(this._product, this._refresh);
+  ShoppingListBottomSheet(this._product);
 
   @override
   Widget build(BuildContext context) {
-    return GraphQLConsumer(
+    return SafeArea(
+      child: GraphQLConsumer(
         builder: (client) => QuantityPicker(
             product: _product,
             onUpdateQuantity: (quantity) {
               if (quantity == _product.quantity) {
                 // No update needed, close the bottom sheet
-                Navigator.pop(context);
+                Navigator.pop(context, false);
                 return;
               }
-              client.mutate(MutationOptions(
+              client
+                  .mutate(MutationOptions(
                 document: updateQuantityMutation,
-                variables: {'id': _product.id, 'quantity': quantity},
-              )).then((result) {
-                Navigator.pop(context);
-                _refresh();
+                variables: {
+                  'id': _product.id,
+                  'quantity': quantity,
+                  'unit': 'UNIT'
+                },
+              ))
+                  .then((result) {
+                Navigator.pop(context, true);
               });
-            }
-        )
+            }),
+      ),
     );
   }
 }
