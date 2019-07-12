@@ -47,8 +47,8 @@ class ShoppingListsItem extends StatelessWidget {
               ),
               Flexible(
                 child: Container(
-                  padding: EdgeInsetsDirectional.only(start: 5),
-                  child: Text(_title, style: TextStyle(fontWeight: FontWeight.w100, fontSize: 24.0, color: Colors.white)),
+                  padding: EdgeInsetsDirectional.only(start: 15),
+                  child: Text(_title, style: TextStyle(fontWeight: FontWeight.w100, fontSize: 24.0, color: Colors.white), textAlign: TextAlign.center,),
                   alignment: Alignment.center,
                 )),
               Container(
