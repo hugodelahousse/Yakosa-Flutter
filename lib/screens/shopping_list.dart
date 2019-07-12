@@ -12,9 +12,11 @@ import 'package:yakosa/utils/graphql.dart';
 
 class ShoppingListPage extends StatefulWidget {
   final String shoppingListId;
+  final String name;
 
   ShoppingListPage({
     @required this.shoppingListId,
+    @required this.name,
   });
 
   @override
@@ -109,7 +111,7 @@ class ShoppingListPageState extends State<ShoppingListPage> {
             expandedHeight: 180.0,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text("Shopping List ${widget.shoppingListId}"),
+              title: Text(widget.name),
               background: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
