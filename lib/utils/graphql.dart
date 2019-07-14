@@ -19,9 +19,12 @@ final HttpLink httpLink = HttpLink(uri: '${Api.baseUrl}/graphql');
               var reqBody = await json.decode(req.body);
               prefs.setString('token', reqBody['token']);
               prefs.setString('refresh', reqBody['refresh']);
+            } else {
+              print("Refreshing token failed (403) : ${req.body}");
             }
           }
         } catch (error) {
+          print("Refreshing token failed : ${error.message}");
           return '';
         }
         return 'JWT ${prefs.getString('token')}';
