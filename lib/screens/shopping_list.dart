@@ -166,6 +166,9 @@ class ShoppingListPageState extends State<ShoppingListPage> {
                 child: Center(child: Text("No products :(", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.grey)))
                 ) 
               )
+            ),
+            SliverPadding(
+              padding: EdgeInsets.all(20),
             )
         ],
       ),

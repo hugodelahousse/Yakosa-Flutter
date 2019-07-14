@@ -1,4 +1,7 @@
 PODS:
+  - barcode_scan (0.0.1):
+    - Flutter
+    - MTBBarcodeScanner
   - Flutter (1.0.0)
   - google_maps_flutter (0.0.1):
     - Flutter
@@ -26,12 +29,14 @@ PODS:
   - GTMSessionFetcher/Core (1.2.1)
   - location (0.0.1):
     - Flutter
+  - MTBBarcodeScanner (5.0.11)
   - path_provider (0.0.1):
     - Flutter
   - shared_preferences (0.0.1):
     - Flutter
 
 DEPENDENCIES:
+  - barcode_scan (from `.symlinks/plugins/barcode_scan/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
@@ -45,8 +50,11 @@ SPEC REPOS:
     - GoogleSignIn
     - GoogleToolboxForMac
     - GTMSessionFetcher
+    - MTBBarcodeScanner
 
 EXTERNAL SOURCES:
+  barcode_scan:
+    :path: ".symlinks/plugins/barcode_scan/ios"
   Flutter:
     :path: ".symlinks/flutter/ios"
   google_maps_flutter:
@@ -61,6 +69,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences/ios"
 
 SPEC CHECKSUMS:
+  barcode_scan: 33f586d02270046fc6559135038b34b5754eaa4f
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
   google_maps_flutter: 78a52114c898b42ea647919679a4c58b70abe876
   google_sign_in: 27e70a98b529f0b076d4b19f231b81da28b1750b
@@ -69,6 +78,7 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
+  MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
   shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523
 

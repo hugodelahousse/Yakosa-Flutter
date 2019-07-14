@@ -111,7 +111,8 @@ class ShoppingListsPageState extends State<ShoppingListsPage> {
                                   shoppingLists[index].id,
                                   Color(0xFF780B7C),
                                   shoppingLists[index].name,
-                                  shoppingLists[index].products.length),
+                                  shoppingLists[index].products.length,
+                                  () => fetchLists()),
                             );
                           },
                           childCount: shoppingLists.length,
@@ -128,12 +129,13 @@ class ShoppingListsPageState extends State<ShoppingListsPage> {
   }
 
   fetchLists() {
-    setState(() {
-      loading = true;
-    });
+    if (shoppingLists.length == 0)
+      setState(() {
+        loading = true;
+      });
     graphQLCLient.value
         .query(
-      QueryOptions(document: shoppingListQuery),
+      QueryOptions(document: shoppingListQuery, fetchPolicy: FetchPolicy.cacheAndNetwork),
     )
         .then((result) {
       if (result.errors == null && result.data != null) {

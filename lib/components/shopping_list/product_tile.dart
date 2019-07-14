@@ -15,6 +15,8 @@ class ProductTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String name = product.product.info.product_name_fr ?? "No name";
+    final String quantity = product.quantity != null ? product.quantity.toString() : "0";
     return GestureDetector(
       onTap: onPressed,
       child: Container(
@@ -39,7 +41,7 @@ class ProductTile extends StatelessWidget {
                 child: Center(
                   child: Padding(
                     padding: EdgeInsets.only(bottom: 20),
-                    child: Text(product.quantity.toString(), style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white)),
+                    child: Text(quantity, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white)),
                   )
                 )
               )
@@ -55,7 +57,7 @@ class ProductTile extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   boxShadow: [BoxShadow(color: Color(0x40000000), blurRadius: 5, spreadRadius: 2)],
                 ),
-                child: Center(child: Text(product.product.info.product_name_fr, style: TextStyle(fontSize: 15))),
+                child: Center(child: Text(name, style: TextStyle(fontSize: 15))),
               ),
             )
           ],

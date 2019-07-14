@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:yakosa/components/shopping_list/search_page/search_input.dart';
 import 'package:yakosa/utils/api.dart';
 
@@ -26,6 +27,7 @@ class SearchPageState extends State<SearchPage> {
   List<OpenFoodFactsProduct> products = [];
   Map<String, int> selected = {};
   bool loading = false;
+  int willSearch = 0;
 
   @override
   void initState() {
@@ -39,7 +41,8 @@ class SearchPageState extends State<SearchPage> {
         padding: EdgeInsetsDirectional.only(start: 10),
         leading: GestureDetector(child: Row(mainAxisAlignment: MainAxisAlignment.center, mainAxisSize: MainAxisSize.min,children: <Widget>[ Text('Close', style: TextStyle(color: CupertinoColors.activeBlue, fontSize: 20))]), onTap: () => Navigator.of(context).pop(selected)),
         backgroundColor: Colors.white.withOpacity(0),
-        middle: SearchInput(searchProducts),
+        middle: SearchInput((terms) => Future.delayed(const Duration(milliseconds: 500), () { willSearch++; searchProducts(terms); })),
+        //trailing: IconButton(icon: Icon(CupertinoIcons.photo_camera), onPressed: () => print("pressed")),
       ),
       body: loading ?
         Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.purple))) : 
@@ -114,6 +117,9 @@ class SearchPageState extends State<SearchPage> {
   }
 
   searchProducts(String terms) async {
+    willSearch--;
+    if (willSearch > 0)
+      return;
     terms = Uri.encodeFull(terms.trim());
     if (terms.length < 3) {
       if (this.mounted) {
@@ -123,20 +129,33 @@ class SearchPageState extends State<SearchPage> {
       }
       return;
     }
-    if (this.mounted) setState(() => loading = true);
 
-    var result = await Api.searchProduct(terms);
+    if (this.mounted) setState(() => loading = true);
+    bool barcode = int.tryParse(terms) != null;
+    var result = barcode ? await Api.searchBarcode(terms) : await Api.searchProducts(terms);
     if (result.statusCode == 200) {
       var jsonResponse = await json.decode(result.body);
       List<OpenFoodFactsProduct> tmpList = [];
-      for (var i = 0; i < jsonResponse['products'].length; i++) {
-        final productName = jsonResponse['products'][i]['product_name_fr'] ?? jsonResponse['products'][i]['product_name'];
+      if (barcode && jsonResponse['status'] == 1) {
+        final productName = jsonResponse['product']['product_name_fr'] ?? jsonResponse['product']['product_name'];
+        print(productName);
         var product = OpenFoodFactsProduct(
-          jsonResponse['products'][i]['brands'] ?? '',
+          jsonResponse['product']['brands'] ?? '',
           productName ?? '',
-          jsonResponse['products'][i]['code'] ?? '',
-          jsonResponse['products'][i]['image_url']);
+          jsonResponse['product']['code'] ?? '',
+          jsonResponse['product']['image_url']);
+        print(product);
         tmpList.add(product);
+      } else if (!barcode) {
+        for (var i = 0; i < jsonResponse['products'].length; i++) {
+          final productName = jsonResponse['products'][i]['product_name_fr'] ?? jsonResponse['products'][i]['product_name'];
+          var product = OpenFoodFactsProduct(
+            jsonResponse['products'][i]['brands'] ?? '',
+            productName ?? '',
+            jsonResponse['products'][i]['code'] ?? '',
+            jsonResponse['products'][i]['image_url']);
+          tmpList.add(product);
+        }
       }
       if (this.mounted) {
         setState(() {
