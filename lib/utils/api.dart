@@ -17,8 +17,13 @@ class Api {
     return await http.post(getUrl() + 'auth/token/refresh', headers: {'Content-Type': 'application/json; charset=utf-8'}, body: json.encode({'refresh_token': token}));
   }
 
-  static Future<http.Response> searchProduct(String terms) async {
+  static Future<http.Response> searchProducts(String terms) async {
     return await http.get('https://world.openfoodfacts.org/cgi/search.pl?search_terms=$terms&search_simple=1&action=process&json=1&page_size=40&sort_by=unique_scan_n',
+      headers: { 'User-Agent': 'Yakosa - IOS - Version 1.0'});
+  }
+
+  static Future<http.Response> searchBarcode(String barcode) async {
+    return await http.get('https://world.openfoodfacts.org/api/v0/product/$barcode.json',
       headers: { 'User-Agent': 'Yakosa - IOS - Version 1.0'});
   }
 }

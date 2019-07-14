@@ -39,7 +39,7 @@ class _QuantityPickerState extends State<QuantityPicker> {
         Padding(
           padding: EdgeInsets.all(20),
           child: Text(
-            _product.product.info.product_name_fr,
+            _product.product.info.product_name_fr ?? "No name",
             textAlign: TextAlign.center,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
           ),

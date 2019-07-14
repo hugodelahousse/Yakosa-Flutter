@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:barcode_scan/barcode_scan.dart';
+import 'package:flutter/services.dart';
+
 
 class SearchInput extends StatefulWidget {
   final Function _onTextChanged;
@@ -40,42 +43,57 @@ class SearchInputState extends State<SearchInput> {
       showClearIcon = _controller.text.length > 0;
     });
   }
-  
+
+  _scanBarcode() async {
+    try {
+      String barcode = await BarcodeScanner.scan();
+      setState(() {
+        _controller.text = barcode;
+      });
+    } catch(e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-        color: CupertinoColors.lightBackgroundGray.withOpacity(0.6)
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      child: Row(
-        children: <Widget>[
-          Icon(
-            CupertinoIcons.search, 
-            color: CupertinoColors.inactiveGray,
-          ),
-          Expanded(
-            child: CupertinoTextField(
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                border: Border(),
-              ),
-              controller: _controller,
-              focusNode: _focusNode,
-            )
-          ),
-          showClearIcon ?
-            GestureDetector(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Flexible(
+          fit: FlexFit.loose,
+          child: CupertinoTextField(
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              border: Border(),
+            ),
+            prefix: Icon(
+              CupertinoIcons.search,
+              color: CupertinoColors.inactiveGray,
+            ),
+            suffixMode: showClearIcon
+                ? OverlayVisibilityMode.always
+                : OverlayVisibilityMode.never,
+            suffix: GestureDetector(
               onTap: _controller.clear,
               child: Icon(
                 CupertinoIcons.clear_thick_circled,
                 color: CupertinoColors.inactiveGray,
               ),
-            )
-            : Text(''),
-        ],
-      )
+            ),
+            maxLength: 32,
+            autofocus: true,
+            placeholder: "Carottes...",
+            controller: _controller,
+            focusNode: _focusNode,
+          ),
+        ),
+        IconButton(
+          icon: Icon(CupertinoIcons.photo_camera),
+          onPressed: _scanBarcode,
+        ),
+      ],
     );
   }
 }
