@@ -103,7 +103,7 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
                 Center(child: Icon(Icons.center_focus_strong))
               ],
             )
-          : PromotionsList(centerLocation.latitude, centerLocation.longitude, 200, "500"),
+          : PromotionsList(centerLocation.latitude, centerLocation.longitude, 200, "1000"),
       Padding(
         padding: const EdgeInsets.only(top: 40.0),
         child: Align(
@@ -185,6 +185,6 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
           centerLocation.longitude);
     if (distance >= 0.1)
       fetchStores(
-          centerLocation.longitude, centerLocation.latitude, "500", 200);
+          centerLocation.longitude, centerLocation.latitude, "1000", 200);
   }
 }
