@@ -37,15 +37,18 @@ class _PromotionsListState extends State<PromotionsList> {
       ){
         id,
         brand{
-          name
-        },
-        promotions {
-          id,
-          product {
-            barcode,
-            info {
-              image_url,
-              product_name_fr
+          name,
+          promotions {
+            id,
+            price,
+            promotion,
+            type,
+            product {
+              barcode,
+              info {
+                image_url,
+                product_name_fr
+              }
             }
           }
         }
@@ -71,44 +74,50 @@ class _PromotionsListState extends State<PromotionsList> {
           largeTitle: Text('Promotions'),
         ),
         SliverSafeArea(
-            top: false,
-            sliver: loading
-                ? SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 50),
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.purple),
-                        ),
+          top: false,
+          sliver: loading
+              ? SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 50),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(Colors.purple),
                       ),
                     ),
-                  )
-                : (promotions.length > 0
-                    ? SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            return PromotionItem(
-                                promotion: promotions[index].right,
-                                store: promotions[index].left);
-                          },
-                          childCount: promotions.length,
+                  ),
+                )
+              : (promotions.length > 0
+                  ? SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return PromotionItem(
+                              promotion: promotions[index].right,
+                              store: promotions[index].left);
+                        },
+                        childCount: promotions.length,
+                      ),
+                    )
+                  : SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 50, left: 60, right: 60),
+                        child: Text(
+                          "No nearby promotions :(",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 30,
+                              color: CupertinoColors.inactiveGray,
+                              fontWeight: FontWeight.w500),
                         ),
-                      )
-                    : SliverToBoxAdapter(
-                        child: Padding(
-                            padding: EdgeInsets.only(top: 50, left: 60, right: 60),
-                            child: Text("No nearby promotions :(",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 30,
-                                    color: CupertinoColors.inactiveGray,
-                                    fontWeight: FontWeight.w500))))))
+                      ),
+                    )),
+        ),
       ],
     ));
   }
 
   fetchStoresPromotions() {
+    setState(() => loading = true);
     graphQLCLient.value
         .query(
       QueryOptions(
@@ -124,12 +133,9 @@ class _PromotionsListState extends State<PromotionsList> {
         .then((result) {
       if (result.errors == null && result.data != null) {
         List stores = result.data['nearbyStore'];
-        print(stores.toString());
         var newPromotions = List<Pair>();
         stores.forEach((s) {
-          print(s.toString());
-          s['promotions'].forEach((p) {
-            print(p.toString());
+          s['brand']['promotions'].forEach((p) {
             final promotion = Promotion.fromJson(p);
             newPromotions.add(Pair(s['brand']['name'], promotion));
           });
@@ -138,6 +144,7 @@ class _PromotionsListState extends State<PromotionsList> {
           promotions = newPromotions;
         });
       }
+      setState(() => loading = false);
     });
   }
 }

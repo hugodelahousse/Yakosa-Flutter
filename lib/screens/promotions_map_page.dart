@@ -25,6 +25,8 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
   var centerLocation = LatLng(48.853188, 2.349213);
   LatLng lastFetchLocation;
 
+  GoogleMapController mapController;
+  
   var _location = location.Location();
 
   Map<String, Marker> markers = {};
@@ -65,6 +67,11 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
       setState(() {
         centerLocation = LatLng(value.latitude, value.longitude);
       });
+      Future.delayed(Duration(seconds: 1), () => mapController.animateCamera(CameraUpdate.newCameraPosition(
+          CameraPosition(
+              target: centerLocation,
+              zoom: 14,
+        ))));
     });
     if (mapIcon == null) {
       getBytesFromAsset('assets/images/map-icon/3.0x/map-icon.png')
@@ -91,6 +98,7 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
                   myLocationButtonEnabled: true,
                   myLocationEnabled: true,
                   markers: Set<Marker>.of(markers.values),
+                  onMapCreated: _onMapCreated,
                 ),
                 Center(child: Icon(Icons.center_focus_strong))
               ],
@@ -142,7 +150,7 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
         stores.forEach((s) {
           if (!markers.containsKey(s['id']) || true) {
             var marker = Marker(
-              infoWindow: InfoWindow(title: s['brand']['name']),
+                infoWindow: InfoWindow(title: s['brand']['name']),
                 markerId: MarkerId(s['id']),
                 position: LatLng(s['position']['coordinates'][1],
                     s['position']['coordinates'][0]),
@@ -156,6 +164,15 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
         });
       }
     });
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+    mapController.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+          target: centerLocation,
+          zoom: 14,
+    )));
   }
 
   _onCameraIdle() {

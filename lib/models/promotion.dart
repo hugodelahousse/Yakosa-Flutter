@@ -54,12 +54,18 @@ class Promotion {
   final Product product;
   final Brand brand;
   final Store store;
+  final int type; 
+  final double price;
+  final double promotion;
 
   Promotion({
     this.id,
     this.product,
     this.brand,
     this.store,
+    this.type,
+    this.price,
+    this.promotion
   });
 
   factory Promotion.fromJson(Map<String, dynamic> json) => _$PromotionFromJson(json);

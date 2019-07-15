@@ -8,3 +8,7 @@ double LatLngDistance(double lat1, lon1, lat2, lon2) {
           (1 - c((lon2 - lon1) * p))/2;
     return 12742 * asin(sqrt(a));
 }
+
+String getVisibleString(int visibleChars, String input) {
+  return input.substring(0, min(input.length, visibleChars - 3)) + "...";
+}
