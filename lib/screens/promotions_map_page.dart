@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:yakosa/components/promotions_map/promotions_list.dart';
 import 'package:yakosa/components/promotions_map/switcher.dart';
+import 'package:yakosa/models/promotion.dart';
 import 'package:yakosa/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -21,18 +23,25 @@ class PromotionsMapPage extends StatefulWidget {
   }
 }
 
-class PromotionsMapPageState extends State<PromotionsMapPage> {
+class PromotionsMapPageState extends State<PromotionsMapPage>
+    with SingleTickerProviderStateMixin {
   var centerLocation = LatLng(48.853188, 2.349213);
   LatLng lastFetchLocation;
 
   GoogleMapController mapController;
-  
+
   var _location = location.Location();
 
   Map<String, Marker> markers = {};
+  List<Store> stores;
   BitmapDescriptor mapIcon;
 
   bool mapMode = true;
+
+  AnimationController controller;
+  Animation<Offset> offset;
+
+  Store selectedStore;
 
   static const fetchNearbyStores = r"""
     query NearbyStores($position: String!, $distance: String!, $limit: Int!){
@@ -42,11 +51,19 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
         limit: $limit
       ){
         id,
+        name,
+        address,
         position{
           coordinates
         },
         brand{
           name
+          promotions {
+            id
+          }
+        },
+        promotions {
+          id
         }
       }
     }
@@ -67,11 +84,13 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
       setState(() {
         centerLocation = LatLng(value.latitude, value.longitude);
       });
-      Future.delayed(Duration(seconds: 1), () => mapController.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(
-              target: centerLocation,
-              zoom: 14,
-        ))));
+      Future.delayed(
+          Duration(seconds: 1),
+          () => mapController
+                  .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+                target: centerLocation,
+                zoom: 14,
+              ))));
     });
     if (mapIcon == null) {
       getBytesFromAsset('assets/images/map-icon/3.0x/map-icon.png')
@@ -79,6 +98,11 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
         mapIcon = BitmapDescriptor.fromBytes(asset);
       });
     }
+    controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+
+    offset = Tween<Offset>(begin: Offset(-2, 0.0), end: Offset.zero)
+        .animate(controller);
   }
 
   @override
@@ -99,25 +123,69 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
                   myLocationEnabled: true,
                   markers: Set<Marker>.of(markers.values),
                   onMapCreated: _onMapCreated,
+                  onTap: _onMapTapped,
                 ),
                 Center(child: Icon(Icons.center_focus_strong))
               ],
             )
-          : PromotionsList(centerLocation.latitude, centerLocation.longitude, 200, "1000"),
+          : PromotionsList(
+              centerLocation.latitude, centerLocation.longitude, 200, "1000"),
       Padding(
-        padding: const EdgeInsets.only(top: 40.0),
+        padding: const EdgeInsets.only(right: 10.0, top: 40.0),
         child: Align(
-            alignment: Alignment.topCenter,
+            alignment: Alignment.topRight,
             child: Switcher(
-                "Map",
-                "List",
-                () => setState(() {
-                      mapMode = true;
-                    }),
-                () => setState(() {
-                      mapMode = false;
-                    }))),
+              Icons.list,
+              Icons.map,
+              () {
+                setState(() {
+                  mapMode = !mapMode;
+                });
+                controller.reverse();
+              },
+            )),
       ),
+      selectedStore != null
+          ? Align(
+              alignment: Alignment.bottomCenter,
+              child: Dismissible(
+                key: Key(UniqueKey().toString()),
+                onDismissed: (direction) {
+                  controller.reverse();
+                  setState(() {
+                    selectedStore = null;
+                  });
+                },
+                child: SlideTransition(
+                  position: offset,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          leading: Icon(Icons.store, size: 40.0),
+                          title: Text(selectedStore != null
+                              ? selectedStore.name
+                              : "Unknown"),
+                          subtitle: Text(selectedStore != null
+                              ? '${selectedStore.address}'
+                              : "Unknown address"),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text(
+                                  '${selectedStore.promotions.length + selectedStore.brand.promotions.length}'),
+                              Icon(Icons.chevron_right, size: 40),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            )
+          : Container()
     ]);
   }
 
@@ -127,7 +195,19 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
   }
 
   _onTapMarker(String id) {
-    print(id + " TAPPED");
+    setState(() {
+      selectedStore = stores.firstWhere((s) => s.id == id);
+    });
+    controller.forward();
+  }
+
+  _onMapTapped(LatLng position) {
+    if (controller.status == AnimationStatus.completed) {
+      controller.reverse();
+      setState(() {
+        selectedStore = null;
+      });
+    }
   }
 
   fetchStores(double long, double lat, String dist, int limit) {
@@ -145,22 +225,26 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
     )
         .then((result) {
       if (result.errors == null && result.data != null) {
-        List stores = result.data['nearbyStore'];
+        List resultList = result.data['nearbyStore'];
+        List<Store> newStores = [];
+        for (var i = 0; i < resultList.length; i++) {
+          newStores.add(Store.fromJson(resultList[i]));
+        }
         var newMarkers = Map<String, Marker>();
-        stores.forEach((s) {
-          if (!markers.containsKey(s['id']) || true) {
+        newStores.forEach((s) {
+          if (s.brand.promotions.length + s.promotions.length > 0) {
             var marker = Marker(
-                infoWindow: InfoWindow(title: s['brand']['name']),
-                markerId: MarkerId(s['id']),
-                position: LatLng(s['position']['coordinates'][1],
-                    s['position']['coordinates'][0]),
+                markerId: MarkerId(s.id),
+                position: LatLng(
+                    s.position.coordinates[1], s.position.coordinates[0]),
                 icon: mapIcon,
-                onTap: () => _onTapMarker(s['id']));
-            newMarkers.putIfAbsent(s['id'], () => marker);
+                onTap: () => _onTapMarker(s.id));
+            newMarkers.putIfAbsent(s.id, () => marker);
           }
         });
         setState(() {
           markers = newMarkers;
+          stores = newStores;
         });
       }
     });
@@ -168,10 +252,9 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    mapController.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(
-          target: centerLocation,
-          zoom: 14,
+    mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+      target: centerLocation,
+      zoom: 14,
     )));
   }
 
@@ -183,8 +266,9 @@ class PromotionsMapPageState extends State<PromotionsMapPage> {
           lastFetchLocation.longitude,
           centerLocation.latitude,
           centerLocation.longitude);
-    if (distance >= 0.1)
+    if (distance >= 0.1) {
       fetchStores(
           centerLocation.longitude, centerLocation.latitude, "1000", 200);
+    }
   }
 }
