@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 import './jwt.dart';
 import './api.dart';
+
+final GlobalKey<NavigatorState> navigatorKey =
+      new GlobalKey<NavigatorState>();
 
 final HttpLink httpLink = HttpLink(uri: '${Api.baseUrl}/graphql');
     final AuthLink authLink = AuthLink(
@@ -21,6 +25,7 @@ final HttpLink httpLink = HttpLink(uri: '${Api.baseUrl}/graphql');
               prefs.setString('refresh', reqBody['refresh']);
             } else {
               print("Refreshing token failed (403) : ${req.body}");
+              signOut();
             }
           }
         } catch (error) {
@@ -39,3 +44,14 @@ final ValueNotifier<GraphQLClient> graphQLCLient = ValueNotifier(
       link: link,
     )
 );
+
+signOut() async {
+  print("signout");
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.remove('token');
+  await prefs.remove('refresh');
+
+  GoogleSignIn googleSignIn = GoogleSignIn();
+  await googleSignIn.signOut();
+  navigatorKey.currentState.pushReplacementNamed('/login');
+}
