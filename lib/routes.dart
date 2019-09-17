@@ -26,6 +26,7 @@ class Routes {
                 DefaultWidgetsLocalizations.delegate,
             ],
             title: "Yakosa",
+            navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
             home:  signedIn ? Layout() : LoginPage(),
             routes: routes,

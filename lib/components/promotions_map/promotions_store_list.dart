@@ -3,39 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:graphql/client.dart';
 import 'package:yakosa/components/promotions_map/promotion_item.dart';
 import 'package:yakosa/models/promotion.dart';
-import 'package:yakosa/screens/filter_page.dart';
 import 'package:yakosa/utils/graphql.dart';
-import 'package:yakosa/utils/shared_preferences.dart';
 
-class Pair {
-  final dynamic left;
-  final dynamic right;
+class PromotionsStoreList extends StatefulWidget {
+  final String storeId;
+  final String storeName;
 
-  Pair(this.left, this.right);
+  PromotionsStoreList(this.storeId, this.storeName);
+
+  _PromotionsStoreListState createState() => _PromotionsStoreListState();
 }
 
-class PromotionsList extends StatefulWidget {
-  final double positionLat;
-  final double positionLong;
-  final int limit;
-
-  PromotionsList(this.positionLat, this.positionLong, this.limit);
-
-  _PromotionsListState createState() => _PromotionsListState();
-}
-
-class _PromotionsListState extends State<PromotionsList> {
+class _PromotionsStoreListState extends State<PromotionsStoreList> {
   bool loading = false;
-  List<Pair> promotions = [];
 
-  String searchDistance;
+  List<Promotion> promotions = [];
 
-  static const fetchNearbyStores = r"""
-    query NearbyStores($position: String!, $distance: String!, $limit: Int!){
-      nearbyStore(
-        position: $position,
-        distance: $distance,
-        limit: $limit
+  static const storePromotionsQuery = r"""
+    query StorePromotions($id: ID!){
+      store(
+        id: $id,
       ){
         id,
         brand{
@@ -63,7 +50,7 @@ class _PromotionsListState extends State<PromotionsList> {
   void initState() {
     super.initState();
 
-    _refreshPreferences();
+    fetchStorePromotions();
   }
 
   @override
@@ -72,25 +59,9 @@ class _PromotionsListState extends State<PromotionsList> {
         child: CustomScrollView(
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
-          middle: Text(""),
+          middle: Text(widget.storeName),
           key: UniqueKey(),
           largeTitle: Text('Promotions'),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-          sliver: SliverToBoxAdapter(
-            child: FlatButton(
-              child: Text("Filters"),
-              color: Colors.grey[200],
-              onPressed: () async {
-                await Navigator.push(context, PageRouteBuilder(
-                    pageBuilder: (BuildContext context, _, __) {
-                  return FilterPage();
-                }));
-                _refreshPreferences();
-              },
-            ),
-          ),
         ),
         SliverSafeArea(
           top: false,
@@ -111,8 +82,8 @@ class _PromotionsListState extends State<PromotionsList> {
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           return PromotionItem(
-                              promotion: promotions[index].right,
-                              store: promotions[index].left);
+                              promotion: promotions[index],
+                              store: widget.storeId);
                         },
                         childCount: promotions.length,
                       ),
@@ -121,7 +92,7 @@ class _PromotionsListState extends State<PromotionsList> {
                       child: Padding(
                         padding: EdgeInsets.only(top: 50, left: 60, right: 60),
                         child: Text(
-                          "No nearby promotions :(",
+                          "No Promotions",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 30,
@@ -135,29 +106,24 @@ class _PromotionsListState extends State<PromotionsList> {
     ));
   }
 
-  fetchStoresPromotions() {
+  fetchStorePromotions() {
     setState(() => loading = true);
     graphQLCLient.value
         .query(
       QueryOptions(
-        document: fetchNearbyStores,
+        document: storePromotionsQuery,
         variables: {
-          "position":
-              "{\"type\": \"Point\", \"coordinates\": [${widget.positionLong}, ${widget.positionLat}]}",
-          "distance": searchDistance,
-          "limit": widget.limit,
+          "id": widget.storeId,
         },
       ),
     )
         .then((result) {
       if (result.errors == null && result.data != null) {
-        List stores = result.data['nearbyStore'];
-        var newPromotions = List<Pair>();
-        stores.forEach((s) {
-          s['brand']['promotions'].forEach((p) {
-            final promotion = Promotion.fromJson(p);
-            newPromotions.add(Pair(s['brand']['name'], promotion));
-          });
+        List promotionsResult = result.data['store']['brand']['promotions'];
+        List<Promotion> newPromotions = [];
+        promotionsResult.forEach((p) {
+          final promotion = Promotion.fromJson(p);
+          newPromotions.add(promotion);
         });
         setState(() {
           promotions = newPromotions;
@@ -165,15 +131,5 @@ class _PromotionsListState extends State<PromotionsList> {
       }
       setState(() => loading = false);
     });
-  }
-
-  _refreshPreferences() {
-    LocalPreferences.getString("search_distance", "1000")
-        .then((x) {
-          setState(() {
-            searchDistance = x;
-          });
-          fetchStoresPromotions();
-        });
   }
 }
