@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:yakosa/components/promotions_map/promotion_page.dart';
 import 'package:yakosa/models/promotion.dart';
-import 'package:yakosa/utils/utils.dart';
 
 class PromotionItem extends StatelessWidget {
   final Promotion promotion;
@@ -18,6 +17,60 @@ class PromotionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Card(
+      elevation: 2,
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ListTile(
+            dense: true,
+            onTap: () => Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => PromotionPage(promotion),
+              ),
+            ),
+            leading: Padding(
+              padding: EdgeInsets.zero,
+              child: Container(
+                width: 60,
+                decoration: BoxDecoration(
+                  image: promotion.product.info.image_url != null
+                      ? DecorationImage(
+                          image: NetworkImage(promotion.product.info.image_url),
+                          fit: BoxFit.cover)
+                      : null,
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+              ),
+            ),
+            title: Text(promotion.product.info.product_name_fr),
+            subtitle: Text(promotion.product.info.brands != null
+                ? promotion.product.info.brands
+                : "No brand"),
+            trailing: Container(
+              width: 50,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: FractionalOffset.topLeft,
+                    end: FractionalOffset.bottomRight,
+                    colors: [
+                      Color(0xFF780B7C),
+                      Color(0xFF780B7C).withRed(200),
+                    ],
+                  ),
+                color: Colors.orangeAccent,
+                shape: BoxShape.circle,
+              ),
+              child: Center(child: Text(promotion.promotion.toString() + "€", style: TextStyle(color: Colors.white, fontSize: 12),)),
+            ),
+          ),
+        ],
+      ),
+    );
+    /*
     return GestureDetector(
       onTap: () => Navigator.push(
             context,
@@ -89,6 +142,6 @@ class PromotionItem extends StatelessWidget {
               )
             ],
           )),
-    );
+    );*/
   }
 }

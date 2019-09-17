@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql/client.dart';
 import 'package:yakosa/components/promotions_map/promotion_item.dart';
+import 'package:yakosa/components/promotions_map/switcher.dart';
 import 'package:yakosa/models/promotion.dart';
 import 'package:yakosa/utils/graphql.dart';
 
@@ -48,6 +49,7 @@ class _PromotionsListState extends State<PromotionsList> {
               info {
                 image_url,
                 product_name_fr
+                brands
               }
             }
           }
@@ -136,6 +138,7 @@ class _PromotionsListState extends State<PromotionsList> {
         var newPromotions = List<Pair>();
         stores.forEach((s) {
           s['brand']['promotions'].forEach((p) {
+            print(p);
             final promotion = Promotion.fromJson(p);
             newPromotions.add(Pair(s['brand']['name'], promotion));
           });
