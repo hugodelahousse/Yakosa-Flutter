@@ -10,10 +10,7 @@ class PromotionItem extends StatelessWidget {
   final Promotion promotion;
   final String store;
 
-  PromotionItem({
-    @required this.promotion,
-    @required this.store,
-  });
+  PromotionItem({@required this.promotion, this.store = ""});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +21,7 @@ class PromotionItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTile(
+            contentPadding: EdgeInsets.all(10),
             dense: true,
             onTap: () => Navigator.push(
               context,
@@ -34,7 +32,8 @@ class PromotionItem extends StatelessWidget {
             leading: Padding(
               padding: EdgeInsets.zero,
               child: Container(
-                width: 60,
+                width: 55,
+                height: 55,
                 decoration: BoxDecoration(
                   image: promotion.product.info.image_url != null
                       ? DecorationImage(
@@ -47,24 +46,43 @@ class PromotionItem extends StatelessWidget {
               ),
             ),
             title: Text(promotion.product.info.product_name_fr),
-            subtitle: Text(promotion.product.info.brands != null
-                ? promotion.product.info.brands
-                : "No brand"),
+            subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(promotion.product.info.brands != null
+                      ? promotion.product.info.brands
+                      : "No brand"),
+                  store.isNotEmpty
+                      ? Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          ),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 1, horizontal: 5),
+                          child: Text(store))
+                      : Container()
+                ]),
             trailing: Container(
               width: 50,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                    begin: FractionalOffset.topLeft,
-                    end: FractionalOffset.bottomRight,
-                    colors: [
-                      Color(0xFF780B7C),
-                      Color(0xFF780B7C).withRed(200),
-                    ],
-                  ),
+                  begin: FractionalOffset.topLeft,
+                  end: FractionalOffset.bottomRight,
+                  colors: [
+                    Color(0xFF780B7C),
+                    Color(0xFF780B7C).withRed(200),
+                  ],
+                ),
                 color: Colors.orangeAccent,
                 shape: BoxShape.circle,
               ),
-              child: Center(child: Text(promotion.promotion.toString() + "€", style: TextStyle(color: Colors.white, fontSize: 12),)),
+              child: Center(
+                  child: Text(
+                promotion.promotion.toString() + "€",
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              )),
             ),
           ),
         ],

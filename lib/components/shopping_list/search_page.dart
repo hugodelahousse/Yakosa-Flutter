@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:yakosa/components/shopping_list/search_page/search_input.dart';
 import 'package:yakosa/utils/api.dart';
 
@@ -42,10 +41,9 @@ class SearchPageState extends State<SearchPage> {
         leading: GestureDetector(child: Row(mainAxisAlignment: MainAxisAlignment.center, mainAxisSize: MainAxisSize.min,children: <Widget>[ Text('Close', style: TextStyle(color: CupertinoColors.activeBlue, fontSize: 20))]), onTap: () => Navigator.of(context).pop(selected)),
         backgroundColor: Colors.white.withOpacity(0),
         middle: SearchInput((terms) => Future.delayed(const Duration(milliseconds: 500), () { willSearch++; searchProducts(terms); })),
-        //trailing: IconButton(icon: Icon(CupertinoIcons.photo_camera), onPressed: () => print("pressed")),
       ),
       body: loading ?
-        Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.purple))) : 
+        Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.purple))) :
           ( products.length == 0 ? Center(child: Text('No results', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, color: Colors.grey)))
             : ListView.separated(
         separatorBuilder: (context, index) => Divider(height: 1, color: Colors.grey),

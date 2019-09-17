@@ -1,7 +1,9 @@
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql/client.dart';
 import 'package:yakosa/components/promotions_map/promotion_item.dart';
+import 'package:yakosa/components/promotions_map/search_bar.dart';
 import 'package:yakosa/models/promotion.dart';
 import 'package:yakosa/utils/graphql.dart';
 
@@ -18,6 +20,7 @@ class _PromotionsStoreListState extends State<PromotionsStoreList> {
   bool loading = false;
 
   List<Promotion> promotions = [];
+  List<Promotion> displayedPromotions = [];
 
   static const storePromotionsQuery = r"""
     query StorePromotions($id: ID!){
@@ -63,6 +66,13 @@ class _PromotionsStoreListState extends State<PromotionsStoreList> {
           key: UniqueKey(),
           largeTitle: Text('Promotions'),
         ),
+        SliverPadding(padding: EdgeInsets.all(4)),
+        SliverPadding(
+          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+          sliver: SliverToBoxAdapter(
+            child: SearchBar((terms) => _searchTerms(terms)),
+          ),
+        ),
         SliverSafeArea(
           top: false,
           sliver: loading
@@ -77,22 +87,22 @@ class _PromotionsStoreListState extends State<PromotionsStoreList> {
                     ),
                   ),
                 )
-              : (promotions.length > 0
+              : (displayedPromotions.length > 0
                   ? SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           return PromotionItem(
-                              promotion: promotions[index],
-                              store: widget.storeId);
+                            promotion: displayedPromotions[index],
+                          );
                         },
-                        childCount: promotions.length,
+                        childCount: displayedPromotions.length,
                       ),
                     )
                   : SliverToBoxAdapter(
                       child: Padding(
                         padding: EdgeInsets.only(top: 50, left: 60, right: 60),
                         child: Text(
-                          "No Promotions",
+                          "No Promotions found",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 30,
@@ -127,9 +137,31 @@ class _PromotionsStoreListState extends State<PromotionsStoreList> {
         });
         setState(() {
           promotions = newPromotions;
+          displayedPromotions = promotions;
         });
       }
       setState(() => loading = false);
     });
+  }
+
+  _searchTerms(String terms) {
+    String trimmed = removeDiacritics(terms.trim().toLowerCase());
+    if (trimmed.isNotEmpty)
+      setState(() {
+        displayedPromotions = promotions
+            .where((x) =>
+                (x.product.info.product_name_fr != null &&
+                    removeDiacritics(
+                            x.product.info.product_name_fr.toLowerCase())
+                        .contains(terms)) ||
+                (x.product.info.brands != null &&
+                    removeDiacritics(x.product.info.brands.toLowerCase())
+                        .contains(terms)))
+            .toList();
+      });
+    else
+      setState(() {
+        displayedPromotions = promotions;
+      });
   }
 }
