@@ -25,7 +25,7 @@ final HttpLink httpLink = HttpLink(uri: '${Api.baseUrl}/graphql');
               prefs.setString('refresh', reqBody['refresh']);
             } else {
               print("Refreshing token failed (403) : ${req.body}");
-              signOut();
+              //signOut();
             }
           }
         } catch (error) {

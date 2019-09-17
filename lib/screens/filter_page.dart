@@ -45,7 +45,7 @@ class FilterPageState extends State<FilterPage> {
                         [
                           SettingItem(
                             'Distance',
-                            value: distance,
+                            value: '${distance}m',
                             hasAction: true,
                             action: () => _showDistancePicker(distance),
                           ),
@@ -74,7 +74,7 @@ class FilterPageState extends State<FilterPage> {
               backgroundColor: CupertinoColors.white,
               children: List<Widget>.generate(distances.length, (int index) {
                 return Center(
-                  child: Text(distances[index].toString()),
+                  child: Text('${distances[index].toString()}m'),
                 );
               }),
               onSelectedItemChanged: (int index) {

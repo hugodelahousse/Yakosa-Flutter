@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:yakosa/components/promotions_map/promotions_list.dart';
+import 'package:yakosa/components/promotions_map/promotions_store_list.dart';
 import 'package:yakosa/components/promotions_map/switcher.dart';
 import 'package:yakosa/models/promotion.dart';
 import 'package:yakosa/utils/shared_preferences.dart';
@@ -184,6 +185,11 @@ class PromotionsMapPageState extends State<PromotionsMapPage>
                               Icon(Icons.chevron_right, size: 40),
                             ],
                           ),
+                          onTap: () => Navigator.push(context, PageRouteBuilder(
+                              pageBuilder: (BuildContext context, _, __) {
+                            return PromotionsStoreList(
+                                selectedStore.id, selectedStore.name);
+                          })),
                         ),
                       ],
                     ),
