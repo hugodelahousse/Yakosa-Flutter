@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:yakosa/components/promotions_map/promotions_list.dart';
 import 'package:yakosa/components/promotions_map/switcher.dart';
 import 'package:yakosa/models/promotion.dart';
+import 'package:yakosa/utils/shared_preferences.dart';
 import 'package:yakosa/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -42,6 +42,8 @@ class PromotionsMapPageState extends State<PromotionsMapPage>
   Animation<Offset> offset;
 
   Store selectedStore;
+
+  String searchDistance;
 
   static const fetchNearbyStores = r"""
     query NearbyStores($position: String!, $distance: String!, $limit: Int!){
@@ -92,6 +94,7 @@ class PromotionsMapPageState extends State<PromotionsMapPage>
                 zoom: 14,
               ))));
     });
+    _refreshPreferences();
     if (mapIcon == null) {
       getBytesFromAsset('assets/images/map-icon/3.0x/map-icon.png')
           .then((asset) {
@@ -129,7 +132,7 @@ class PromotionsMapPageState extends State<PromotionsMapPage>
               ],
             )
           : PromotionsList(
-              centerLocation.latitude, centerLocation.longitude, 200, "1000"),
+              centerLocation.latitude, centerLocation.longitude, 200),
       Padding(
         padding: const EdgeInsets.only(right: 10.0, top: 40.0),
         child: Align(
@@ -141,8 +144,11 @@ class PromotionsMapPageState extends State<PromotionsMapPage>
                 setState(() {
                   mapMode = !mapMode;
                 });
+                LocalPreferences.setBool("promotions_page_map", mapMode);
+                if (mapMode) _refreshPreferences();
                 controller.reverse();
               },
+              mapMode,
             )),
       ),
       selectedStore != null
@@ -267,8 +273,20 @@ class PromotionsMapPageState extends State<PromotionsMapPage>
           centerLocation.latitude,
           centerLocation.longitude);
     if (distance >= 0.1) {
-      fetchStores(
-          centerLocation.longitude, centerLocation.latitude, "1000", 200);
+      fetchStores(centerLocation.longitude, centerLocation.latitude,
+          searchDistance, 200);
     }
+  }
+
+  _refreshPreferences() {
+    LocalPreferences.getString("search_distance", "1000")
+        .then((x) => setState(() {
+              searchDistance = x;
+            }));
+    LocalPreferences.getBool("promotions_page_map", true)
+        .then((x) => setState(() {
+              mapMode = x;
+              if (mapMode) controller.reverse();
+            }));
   }
 }

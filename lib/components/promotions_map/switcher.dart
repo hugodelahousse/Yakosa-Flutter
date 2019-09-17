@@ -5,17 +5,16 @@ class Switcher extends StatefulWidget {
   final IconData firstIcon;
   final IconData secondIcon;
   final Function callback;
+  final firstSelected;
 
-  Switcher(this.firstIcon, this.secondIcon, this.callback);
+  Switcher(this.firstIcon, this.secondIcon, this.callback, this.firstSelected);
 
   _SwitcherState createState() => _SwitcherState();
 }
 
 class _SwitcherState extends State<Switcher> {
-  bool firstSelected = true;
 
   void _onPressed() {
-    firstSelected = !firstSelected;
     widget.callback();
   }
 
@@ -31,7 +30,7 @@ class _SwitcherState extends State<Switcher> {
       ),
       child: IconButton(
         color: Colors.black54,
-        icon: Icon(firstSelected ? widget.firstIcon : widget.secondIcon),
+        icon: Icon(widget.firstSelected ? widget.firstIcon : widget.secondIcon),
         onPressed: _onPressed,
       )
     );

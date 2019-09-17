@@ -2,9 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql/client.dart';
 import 'package:yakosa/components/promotions_map/promotion_item.dart';
-import 'package:yakosa/components/promotions_map/switcher.dart';
 import 'package:yakosa/models/promotion.dart';
+import 'package:yakosa/screens/filter_page.dart';
 import 'package:yakosa/utils/graphql.dart';
+import 'package:yakosa/utils/shared_preferences.dart';
 
 class Pair {
   final dynamic left;
@@ -17,10 +18,8 @@ class PromotionsList extends StatefulWidget {
   final double positionLat;
   final double positionLong;
   final int limit;
-  final String distance;
 
-  PromotionsList(
-      this.positionLat, this.positionLong, this.limit, this.distance);
+  PromotionsList(this.positionLat, this.positionLong, this.limit);
 
   _PromotionsListState createState() => _PromotionsListState();
 }
@@ -28,6 +27,8 @@ class PromotionsList extends StatefulWidget {
 class _PromotionsListState extends State<PromotionsList> {
   bool loading = false;
   List<Pair> promotions = [];
+
+  String searchDistance;
 
   static const fetchNearbyStores = r"""
     query NearbyStores($position: String!, $distance: String!, $limit: Int!){
@@ -62,7 +63,7 @@ class _PromotionsListState extends State<PromotionsList> {
   void initState() {
     super.initState();
 
-    fetchStoresPromotions();
+    _refreshPreferences();
   }
 
   @override
@@ -74,6 +75,22 @@ class _PromotionsListState extends State<PromotionsList> {
           middle: Text(""),
           key: UniqueKey(),
           largeTitle: Text('Promotions'),
+        ),
+        SliverPadding(
+          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+          sliver: SliverToBoxAdapter(
+            child: FlatButton(
+              child: Text("Filters"),
+              color: Colors.grey[200],
+              onPressed: () async {
+                await Navigator.push(context, PageRouteBuilder(
+                    pageBuilder: (BuildContext context, _, __) {
+                  return FilterPage();
+                }));
+                _refreshPreferences();
+              },
+            ),
+          ),
         ),
         SliverSafeArea(
           top: false,
@@ -127,7 +144,7 @@ class _PromotionsListState extends State<PromotionsList> {
         variables: {
           "position":
               "{\"type\": \"Point\", \"coordinates\": [${widget.positionLong}, ${widget.positionLat}]}",
-          "distance": widget.distance,
+          "distance": searchDistance,
           "limit": widget.limit,
         },
       ),
@@ -138,7 +155,6 @@ class _PromotionsListState extends State<PromotionsList> {
         var newPromotions = List<Pair>();
         stores.forEach((s) {
           s['brand']['promotions'].forEach((p) {
-            print(p);
             final promotion = Promotion.fromJson(p);
             newPromotions.add(Pair(s['brand']['name'], promotion));
           });
@@ -149,5 +165,15 @@ class _PromotionsListState extends State<PromotionsList> {
       }
       setState(() => loading = false);
     });
+  }
+
+  _refreshPreferences() {
+    LocalPreferences.getString("search_distance", "1000")
+        .then((x) {
+          setState(() {
+            searchDistance = x;
+          });
+          fetchStoresPromotions();
+        });
   }
 }
