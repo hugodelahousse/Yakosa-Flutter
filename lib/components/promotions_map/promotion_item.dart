@@ -54,17 +54,21 @@ class PromotionItem extends StatelessWidget {
               width: 50,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                    begin: FractionalOffset.topLeft,
-                    end: FractionalOffset.bottomRight,
-                    colors: [
-                      Color(0xFF780B7C),
-                      Color(0xFF780B7C).withRed(200),
-                    ],
-                  ),
+                  begin: FractionalOffset.topLeft,
+                  end: FractionalOffset.bottomRight,
+                  colors: [
+                    Color(0xFF780B7C),
+                    Color(0xFF780B7C).withRed(200),
+                  ],
+                ),
                 color: Colors.orangeAccent,
                 shape: BoxShape.circle,
               ),
-              child: Center(child: Text(promotion.promotion.toString() + "€", style: TextStyle(color: Colors.white, fontSize: 12),)),
+              child: Center(
+                  child: Text(
+                promotion.promotion.toString() + "€",
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              )),
             ),
           ),
         ],

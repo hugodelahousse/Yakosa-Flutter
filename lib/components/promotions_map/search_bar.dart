@@ -1,21 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:barcode_scan/barcode_scan.dart';
 
-class SearchInput extends StatefulWidget {
+class SearchBar extends StatefulWidget {
   final Function _onTextChanged;
 
-  SearchInput(this._onTextChanged);
+  SearchBar(this._onTextChanged);
 
   @override
   State<StatefulWidget> createState() {
-    return SearchInputState();
+    return SearchBarState();
   }
 }
 
-class SearchInputState extends State<SearchInput> {
+class SearchBarState extends State<SearchBar> {
   TextEditingController _controller;
-  FocusNode _focusNode;
 
   bool showClearIcon = false;
 
@@ -23,13 +21,11 @@ class SearchInputState extends State<SearchInput> {
   void initState() {
     super.initState();
     this._controller = TextEditingController()..addListener(_onTextChanged);
-    this._focusNode = FocusNode();
     showClearIcon = _controller.text.length > 0;
   }
 
   @override
   void dispose() {
-    _focusNode.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -42,17 +38,6 @@ class SearchInputState extends State<SearchInput> {
     });
   }
 
-  _scanBarcode() async {
-    try {
-      String barcode = await BarcodeScanner.scan();
-      setState(() {
-        _controller.text = barcode;
-      });
-    } catch(e) {
-      print(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -63,8 +48,10 @@ class SearchInputState extends State<SearchInput> {
           fit: FlexFit.loose,
           child: CupertinoTextField(
             decoration: BoxDecoration(
-              color: Colors.transparent,
+              color: Colors.white,
               border: Border(),
+              boxShadow: [BoxShadow(blurRadius: 1, color: Colors.black26, offset: Offset(0, 1))],
+              borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
             prefix: Icon(
               CupertinoIcons.search,
@@ -81,15 +68,10 @@ class SearchInputState extends State<SearchInput> {
               ),
             ),
             maxLength: 32,
-            autofocus: true,
+            autofocus: false,
             placeholder: "Carottes...",
             controller: _controller,
-            focusNode: _focusNode,
           ),
-        ),
-        IconButton(
-          icon: Icon(CupertinoIcons.photo_camera),
-          onPressed: _scanBarcode,
         ),
       ],
     );

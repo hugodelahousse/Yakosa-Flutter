@@ -2,17 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql/client.dart';
 import 'package:yakosa/components/promotions_map/promotion_item.dart';
+import 'package:yakosa/components/promotions_map/search_bar.dart';
 import 'package:yakosa/models/promotion.dart';
 import 'package:yakosa/screens/filter_page.dart';
 import 'package:yakosa/utils/graphql.dart';
 import 'package:yakosa/utils/shared_preferences.dart';
-
-class Pair {
-  final dynamic left;
-  final dynamic right;
-
-  Pair(this.left, this.right);
-}
+import 'package:diacritic/diacritic.dart';
 
 class PromotionsList extends StatefulWidget {
   final double positionLat;
@@ -26,7 +21,8 @@ class PromotionsList extends StatefulWidget {
 
 class _PromotionsListState extends State<PromotionsList> {
   bool loading = false;
-  List<Pair> promotions = [];
+  List<Promotion> promotions = [];
+  List<Promotion> displayedPromotions = [];
 
   String searchDistance;
 
@@ -53,6 +49,9 @@ class _PromotionsListState extends State<PromotionsList> {
                 brands
               }
             }
+            brand {
+              name
+            }
           }
         }
       }
@@ -75,6 +74,13 @@ class _PromotionsListState extends State<PromotionsList> {
           middle: Text(""),
           key: UniqueKey(),
           largeTitle: Text('Promotions'),
+        ),
+        SliverPadding(padding: EdgeInsets.all(4)),
+        SliverPadding(
+          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+          sliver: SliverToBoxAdapter(
+            child: SearchBar((terms) => _searchTerms(terms)),
+          ),
         ),
         SliverPadding(
           padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
@@ -106,15 +112,17 @@ class _PromotionsListState extends State<PromotionsList> {
                     ),
                   ),
                 )
-              : (promotions.length > 0
+              : (displayedPromotions.length > 0
                   ? SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           return PromotionItem(
-                              promotion: promotions[index].right,
-                              store: promotions[index].left);
+                              promotion: displayedPromotions[index],
+                              store: displayedPromotions[index].brand != null
+                                  ? displayedPromotions[index].brand.name
+                                  : "No store");
                         },
-                        childCount: promotions.length,
+                        childCount: displayedPromotions.length,
                       ),
                     )
                   : SliverToBoxAdapter(
@@ -152,15 +160,16 @@ class _PromotionsListState extends State<PromotionsList> {
         .then((result) {
       if (result.errors == null && result.data != null) {
         List stores = result.data['nearbyStore'];
-        var newPromotions = List<Pair>();
+        var newPromotions = List<Promotion>();
         stores.forEach((s) {
           s['brand']['promotions'].forEach((p) {
             final promotion = Promotion.fromJson(p);
-            newPromotions.add(Pair(s['brand']['name'], promotion));
+            newPromotions.add(promotion);
           });
         });
         setState(() {
           promotions = newPromotions;
+          displayedPromotions = promotions;
         });
       }
       setState(() => loading = false);
@@ -168,12 +177,35 @@ class _PromotionsListState extends State<PromotionsList> {
   }
 
   _refreshPreferences() {
-    LocalPreferences.getString("search_distance", "1000")
-        .then((x) {
-          setState(() {
-            searchDistance = x;
-          });
-          fetchStoresPromotions();
-        });
+    LocalPreferences.getString("search_distance", "1000").then((x) {
+      setState(() {
+        searchDistance = x;
+      });
+      fetchStoresPromotions();
+    });
+  }
+
+  _searchTerms(String terms) {
+    String trimmed = removeDiacritics(terms.trim().toLowerCase());
+    if (trimmed.isNotEmpty)
+      setState(() {
+        displayedPromotions = promotions
+            .where((x) =>
+                (x.brand.name != null &&
+                    removeDiacritics(x.brand.name.toLowerCase())
+                        .contains(trimmed)) ||
+                (x.product.info.product_name_fr != null &&
+                    removeDiacritics(
+                            x.product.info.product_name_fr.toLowerCase())
+                        .contains(terms)) ||
+                (x.product.info.brands != null &&
+                    removeDiacritics(x.product.info.brands.toLowerCase())
+                        .contains(terms)))
+            .toList();
+      });
+    else
+      setState(() {
+        displayedPromotions = promotions;
+      });
   }
 }
