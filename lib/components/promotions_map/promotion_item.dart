@@ -21,6 +21,7 @@ class PromotionItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTile(
+            contentPadding: EdgeInsets.all(10),
             dense: true,
             onTap: () => Navigator.push(
               context,
@@ -31,7 +32,8 @@ class PromotionItem extends StatelessWidget {
             leading: Padding(
               padding: EdgeInsets.zero,
               child: Container(
-                width: 60,
+                width: 55,
+                height: 55,
                 decoration: BoxDecoration(
                   image: promotion.product.info.image_url != null
                       ? DecorationImage(
