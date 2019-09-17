@@ -92,8 +92,8 @@ class _PromotionsStoreListState extends State<PromotionsStoreList> {
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           return PromotionItem(
-                              promotion: displayedPromotions[index],
-                              store: widget.storeId);
+                            promotion: displayedPromotions[index],
+                          );
                         },
                         childCount: displayedPromotions.length,
                       ),
@@ -143,7 +143,6 @@ class _PromotionsStoreListState extends State<PromotionsStoreList> {
       setState(() => loading = false);
     });
   }
-
 
   _searchTerms(String terms) {
     String trimmed = removeDiacritics(terms.trim().toLowerCase());

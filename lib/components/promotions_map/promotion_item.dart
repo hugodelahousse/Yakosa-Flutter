@@ -10,10 +10,7 @@ class PromotionItem extends StatelessWidget {
   final Promotion promotion;
   final String store;
 
-  PromotionItem({
-    @required this.promotion,
-    @required this.store,
-  });
+  PromotionItem({@required this.promotion, this.store = ""});
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +44,24 @@ class PromotionItem extends StatelessWidget {
               ),
             ),
             title: Text(promotion.product.info.product_name_fr),
-            subtitle: Text(promotion.product.info.brands != null
-                ? promotion.product.info.brands
-                : "No brand"),
+            subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(promotion.product.info.brands != null
+                      ? promotion.product.info.brands
+                      : "No brand"),
+                  store.isNotEmpty
+                      ? Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          ),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 1, horizontal: 5),
+                          child: Text(store))
+                      : Container()
+                ]),
             trailing: Container(
               width: 50,
               decoration: BoxDecoration(
