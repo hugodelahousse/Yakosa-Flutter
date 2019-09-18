@@ -52,6 +52,9 @@ class _PromotionsListState extends State<PromotionsList> {
             brand {
               name
             }
+            store {
+              name
+            }
           }
         }
       }

@@ -35,6 +35,9 @@ class _PromotionsStoreListState extends State<PromotionsStoreList> {
             price,
             promotion,
             type,
+            brand {
+              name
+            }
             product {
               barcode,
               info {
