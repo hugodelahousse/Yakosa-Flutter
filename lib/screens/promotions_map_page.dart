@@ -185,11 +185,11 @@ class PromotionsMapPageState extends State<PromotionsMapPage>
                               Icon(Icons.chevron_right, size: 40),
                             ],
                           ),
-                          onTap: () => Navigator.push(context, PageRouteBuilder(
-                              pageBuilder: (BuildContext context, _, __) {
-                            return PromotionsStoreList(
-                                selectedStore.id, selectedStore.name);
-                          })),
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PromotionsStoreList(
+                                      selectedStore.id, selectedStore.name))),
                         ),
                       ],
                     ),

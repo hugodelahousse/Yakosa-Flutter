@@ -25,7 +25,7 @@ class PromotionItem extends StatelessWidget {
             dense: true,
             onTap: () => Navigator.push(
               context,
-              CupertinoPageRoute(
+              MaterialPageRoute(
                 builder: (context) => PromotionPage(promotion),
               ),
             ),

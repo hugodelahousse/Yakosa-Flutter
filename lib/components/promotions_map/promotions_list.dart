@@ -89,10 +89,8 @@ class _PromotionsListState extends State<PromotionsList> {
               child: Text("Filters"),
               color: Colors.grey[200],
               onPressed: () async {
-                await Navigator.push(context, PageRouteBuilder(
-                    pageBuilder: (BuildContext context, _, __) {
-                  return FilterPage();
-                }));
+                await Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => FilterPage()));
                 _refreshPreferences();
               },
             ),
