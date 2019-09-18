@@ -136,13 +136,11 @@ class SearchPageState extends State<SearchPage> {
       List<OpenFoodFactsProduct> tmpList = [];
       if (barcode && jsonResponse['status'] == 1) {
         final productName = jsonResponse['product']['product_name_fr'] ?? jsonResponse['product']['product_name'];
-        print(productName);
         var product = OpenFoodFactsProduct(
           jsonResponse['product']['brands'] ?? '',
           productName ?? '',
           jsonResponse['product']['code'] ?? '',
           jsonResponse['product']['image_url']);
-        print(product);
         tmpList.add(product);
       } else if (!barcode) {
         for (var i = 0; i < jsonResponse['products'].length; i++) {
