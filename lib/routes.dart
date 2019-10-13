@@ -17,6 +17,7 @@ class Routes {
   };
 
   Routes() {
+    WidgetsFlutterBinding.ensureInitialized();
     Auth.isTokenDefined().then((signedIn) {
       runApp(GraphQLProvider(
           client: graphQLCLient,
