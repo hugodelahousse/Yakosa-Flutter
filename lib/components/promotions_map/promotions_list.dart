@@ -140,6 +140,7 @@ class _PromotionsListState extends State<PromotionsList> {
                       ),
                     )),
         ),
+        SliverPadding(padding: EdgeInsets.all(8)),
       ],
     ));
   }

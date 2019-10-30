@@ -115,6 +115,7 @@ class _PromotionsStoreListState extends State<PromotionsStoreList> {
                       ),
                     )),
         ),
+        SliverPadding(padding: EdgeInsets.all(8)),
       ],
     ));
   }

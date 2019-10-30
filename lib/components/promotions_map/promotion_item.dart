@@ -45,7 +45,7 @@ class PromotionItem extends StatelessWidget {
                 ),
               ),
             ),
-            title: Text(promotion.product.info.product_name_fr),
+            title: Text(promotion.product.info.product_name_fr != null ? promotion.product.info.product_name_fr : "No name"),
             subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
