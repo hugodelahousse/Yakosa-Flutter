@@ -25,7 +25,7 @@ class LoginSliderState extends State<LoginSlider> {
           enableInfiniteScroll: true,
           pauseAutoPlayOnTouch: Duration(seconds: 2),
           items: <Widget>[
-            SlideItem("Fill your shopping list", "Add your all your products prefereneces within the app in a few touches"),
+            SlideItem("Fill your shopping list", "Add your all your products preferences within the app in a few touches"),
             SlideItem("Find near promotions", "Your nearly grocery shops will list every promotions related to your shopping list"),
             SlideItem("Follow the guide", "YAKOSA provides you with an intelligent shops itinerary for the cheapest basket")
             ],
