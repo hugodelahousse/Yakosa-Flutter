@@ -57,7 +57,7 @@ class ProductTile extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   boxShadow: [BoxShadow(color: Color(0x40000000), blurRadius: 5, spreadRadius: 2)],
                 ),
-                child: Center(child: Text(name, style: TextStyle(fontSize: 15))),
+                child: Center(child: Text(name, style: TextStyle(fontSize: 15), overflow: TextOverflow.ellipsis)),
               ),
             )
           ],
