@@ -16,6 +16,10 @@ class OpenFoodFactsProduct {
 }
 
 class SearchPage extends StatefulWidget {
+  Map<String, int> products;
+
+  SearchPage({@required this.products});
+
   @override
   State<StatefulWidget> createState() {
     return SearchPageState();
@@ -31,6 +35,9 @@ class SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      selected = widget.products;
+    });
   }
 
   @override
