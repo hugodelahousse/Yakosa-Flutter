@@ -11,6 +11,7 @@ class PromotionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(promotion.product.barcode);
     return CupertinoPageScaffold(
       child: CustomScrollView(
         slivers: <Widget>[
@@ -59,7 +60,7 @@ class PromotionPage extends StatelessWidget {
                             key: Key(UniqueKey().toString()),
                             child: Center(
                                 child: Text(
-                              '${promotion.promotion.toString()}€',
+                              '${(promotion.promotion).toStringAsFixed(2)}€',
                               style:
                                   TextStyle(fontSize: 30, color: Colors.green),
                             )),
@@ -76,7 +77,7 @@ class PromotionPage extends StatelessWidget {
                           child: PromotionInfoCard(
                               promotion.brand.name,
                               promotion.price + promotion.promotion,
-                              promotion.promotion,
+                              promotion.price,
                               promotion.product.info.brands)),
                     ],
                   ),

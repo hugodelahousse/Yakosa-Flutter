@@ -55,6 +55,7 @@ class _PromotionsStoreListState extends State<PromotionsStoreList> {
   @override
   void initState() {
     super.initState();
+    print(widget.storeId);
 
     fetchStorePromotions();
   }
@@ -62,9 +63,11 @@ class _PromotionsStoreListState extends State<PromotionsStoreList> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: Colors.white,
         child: CustomScrollView(
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
+          backgroundColor: Colors.white,
           middle: Text(widget.storeName),
           key: UniqueKey(),
           largeTitle: Text('Promotions'),

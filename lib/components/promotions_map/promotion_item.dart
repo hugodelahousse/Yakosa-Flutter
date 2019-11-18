@@ -80,7 +80,7 @@ class PromotionItem extends StatelessWidget {
               ),
               child: Center(
                   child: Text(
-                promotion.promotion.toString() + "€",
+                promotion.promotion.toStringAsFixed(2) + "€",
                 style: TextStyle(color: Colors.white, fontSize: 12),
               )),
             ),
