@@ -21,10 +21,12 @@ class Auth {
   Auth(this._instance);
 
   listenLogin(BuildContext context) {
-    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) async {
+    _googleSignIn.onCurrentUserChanged
+        .listen((GoogleSignInAccount account) async {
       if (account != null) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        if (prefs.getString('token') == null || prefs.getString('token').length < 100) {
+        if (prefs.getString('token') == null ||
+            prefs.getString('token').length < 100) {
           try {
             var auth = await account.authentication;
             var server = await Api.getTokenWithGoogleToken(auth.idToken);
@@ -32,7 +34,7 @@ class Auth {
               var jsonResponse = await json.decode(server.body);
               await prefs.setString('token', jsonResponse['token']);
               await prefs.setString('refresh', jsonResponse['refresh']);
-              _instance.isLoading =  false;
+              _instance.isLoading = false;
               Navigator.pushReplacementNamed(context, '/home');
             }
           } catch (error) {
@@ -41,7 +43,7 @@ class Auth {
             _showErrorDialog(context);
           }
         } else {
-          _instance.isLoading =  false;
+          _instance.isLoading = false;
           Navigator.pushReplacementNamed(context, '/home');
         }
       }
@@ -58,14 +60,13 @@ class Auth {
     await prefs.remove('token');
     await prefs.remove('refresh');
     _googleSignIn.signOut();
-    _instance.isLoading =  false;
+    _instance.isLoading = false;
   }
 
   googleConnect() async {
     try {
       GoogleSignInAccount account = await _googleSignIn.signIn();
-      if (account == null)
-        _instance.isLoading = false;
+      if (account == null) _instance.isLoading = false;
     } catch (error) {
       print('Google Sign in request failed : ' + error.toString());
       await signOut();
@@ -74,31 +75,30 @@ class Auth {
 
   facebookConnect() {
     print("FACEBOOK CONNECT");
-  }  
+  }
 
   _showErrorDialog(BuildContext context) {
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return new CupertinoAlertDialog(
-          title: new Text("Login failed"),
-          content: new Text("Network error : Please retry later"),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text("OK"),
-            ),
-        ]);
-      }
-    );
+        context: context,
+        builder: (BuildContext context) {
+          return new CupertinoAlertDialog(
+              title: new Text("Login failed"),
+              content: new Text("Network error : Please retry later"),
+              actions: <Widget>[
+                CupertinoDialogAction(
+                  isDefaultAction: true,
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text("OK"),
+                ),
+              ]);
+        });
   }
 
   static Future<bool> isTokenDefined() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('token') != null &&
-            prefs.getString('token').length >= 100 &&
-            prefs.getString('refresh') != null &&
-            prefs.getString('refresh').length >= 100;
+        prefs.getString('token').length >= 100 &&
+        prefs.getString('refresh') != null &&
+        prefs.getString('refresh').length >= 100;
   }
 }

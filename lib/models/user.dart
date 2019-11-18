@@ -9,12 +9,7 @@ class User {
   final String lastName;
   final int age;
 
-  User({
-    this.id,
-    this.firstName,
-    this.lastName,
-    this.age
-  });
+  User({this.id, this.firstName, this.lastName, this.age});
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }

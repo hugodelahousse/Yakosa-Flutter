@@ -21,7 +21,8 @@ class LocalPreferences {
     return prefs.containsKey(key) ? prefs.getInt(key) : _default;
   }
 
-  static Future<List<String>> getStringList(String key, List<String> _default) async {
+  static Future<List<String>> getStringList(
+      String key, List<String> _default) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.containsKey(key) ? prefs.getStringList(key) : _default;
   }

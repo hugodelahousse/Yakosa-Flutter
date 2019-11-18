@@ -14,7 +14,8 @@ class ProductInfo {
     this.product_name_fr,
   });
 
-  factory ProductInfo.fromJson(Map<String, dynamic> json) => _$ProductInfoFromJson(json);
+  factory ProductInfo.fromJson(Map<String, dynamic> json) =>
+      _$ProductInfoFromJson(json);
 }
 
 @JsonSerializable()
@@ -27,7 +28,8 @@ class Product {
     this.info,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);
+  factory Product.fromJson(Map<String, dynamic> json) =>
+      _$ProductFromJson(json);
 }
 
 @JsonSerializable()

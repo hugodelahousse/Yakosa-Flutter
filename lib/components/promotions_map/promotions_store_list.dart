@@ -63,64 +63,65 @@ class _PromotionsStoreListState extends State<PromotionsStoreList> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: Colors.white,
+        backgroundColor: Colors.white,
         child: CustomScrollView(
-      slivers: <Widget>[
-        CupertinoSliverNavigationBar(
-          backgroundColor: Colors.white,
-          middle: Text(widget.storeName),
-          key: UniqueKey(),
-          largeTitle: Text('Promotions'),
-        ),
-        SliverPadding(padding: EdgeInsets.all(4)),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-          sliver: SliverToBoxAdapter(
-            child: SearchBar((terms) => _searchTerms(terms)),
-          ),
-        ),
-        SliverSafeArea(
-          top: false,
-          sliver: loading
-              ? SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 50),
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(Colors.purple),
-                      ),
-                    ),
-                  ),
-                )
-              : (displayedPromotions.length > 0
-                  ? SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          return PromotionItem(
-                            promotion: displayedPromotions[index],
-                          );
-                        },
-                        childCount: displayedPromotions.length,
-                      ),
-                    )
-                  : SliverToBoxAdapter(
+          slivers: <Widget>[
+            CupertinoSliverNavigationBar(
+              backgroundColor: Colors.white,
+              middle: Text(widget.storeName),
+              key: UniqueKey(),
+              largeTitle: Text('Promotions'),
+            ),
+            SliverPadding(padding: EdgeInsets.all(4)),
+            SliverPadding(
+              padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+              sliver: SliverToBoxAdapter(
+                child: SearchBar((terms) => _searchTerms(terms)),
+              ),
+            ),
+            SliverSafeArea(
+              top: false,
+              sliver: loading
+                  ? SliverToBoxAdapter(
                       child: Padding(
-                        padding: EdgeInsets.only(top: 50, left: 60, right: 60),
-                        child: Text(
-                          "No Promotions found",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 30,
-                              color: CupertinoColors.inactiveGray,
-                              fontWeight: FontWeight.w500),
+                        padding: EdgeInsets.only(top: 50),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.purple),
+                          ),
                         ),
                       ),
-                    )),
-        ),
-        SliverPadding(padding: EdgeInsets.all(8)),
-      ],
-    ));
+                    )
+                  : (displayedPromotions.length > 0
+                      ? SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return PromotionItem(
+                                promotion: displayedPromotions[index],
+                              );
+                            },
+                            childCount: displayedPromotions.length,
+                          ),
+                        )
+                      : SliverToBoxAdapter(
+                          child: Padding(
+                            padding:
+                                EdgeInsets.only(top: 50, left: 60, right: 60),
+                            child: Text(
+                              "No Promotions found",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 30,
+                                  color: CupertinoColors.inactiveGray,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        )),
+            ),
+            SliverPadding(padding: EdgeInsets.all(8)),
+          ],
+        ));
   }
 
   fetchStorePromotions() {

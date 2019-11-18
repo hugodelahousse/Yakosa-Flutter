@@ -48,7 +48,7 @@ class SearchInputState extends State<SearchInput> {
       setState(() {
         _controller.text = barcode;
       });
-    } catch(e) {
+    } catch (e) {
       print(e);
     }
   }

@@ -9,14 +9,13 @@ import 'package:yakosa/components/settings_page/settings_group.dart';
 import 'package:yakosa/components/settings_page/setting_item.dart';
 
 class SettingsPage extends StatefulWidget {
-@override
+  @override
   State<StatefulWidget> createState() {
     return SettingsPageState();
   }
 }
 
 class SettingsPageState extends State<SettingsPage> {
-
   final query = r"""
     query Profile{
       user: currentUser {
@@ -34,67 +33,66 @@ class SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: Colors.white,
-      child: Container(
-        color: Color(0xFFEFEFF4),
-        child: CustomScrollView(
-          slivers: <Widget>[
-            CupertinoSliverNavigationBar(
-              backgroundColor: Colors.white,
-              largeTitle: Text('Settings'),
-            ),
-            SliverSafeArea(
-              top: false,
-              sliver: SliverList(
-                delegate: SliverChildListDelegate(
-                  <Widget>[
-                    SettingsGroup(
-                      [
-                        Query(
-                          options: QueryOptions(document: query, variables: {"id": 12}),
-                          builder: (QueryResult result, { VoidCallback refetch }) {
-                            if (result.loading) {
-                              return SettingItem(
-                                'Name',
-                              );
-                            }
-                            if (result.data == null || result.data['user'] == null) {
-                              return SettingItem(
-                                'Name',
-                                value: 'An error occured',
-                              );
-                            }
-
-                            User profile = User.fromJson(result.data['user']);
-
-                            return SettingItem(
-                              'Name',
-                              value: '${profile.firstName} ${profile.lastName}',
-                            );
-                          },
-                        ),
-                      ],
-                      label: Text('Profile'),
-                    ),
-                    SettingsGroup(
-                      [
-                        SettingItem(
-                          'Sign Out',
-                          hasAction: true,
-                          action: signOut,
-                        )
-                      ],
-                      label: Text('Advanced'),
-                    )
-
-                  ]
+        backgroundColor: Colors.white,
+        child: Container(
+            color: Color(0xFFEFEFF4),
+            child: CustomScrollView(
+              slivers: <Widget>[
+                CupertinoSliverNavigationBar(
+                  backgroundColor: Colors.white,
+                  largeTitle: Text('Settings'),
                 ),
-              ),
-            )
-          ],
-        )
-      )
-    );
+                SliverSafeArea(
+                  top: false,
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate(<Widget>[
+                      SettingsGroup(
+                        [
+                          Query(
+                            options: QueryOptions(
+                                document: query, variables: {"id": 12}),
+                            builder: (QueryResult result,
+                                {VoidCallback refetch}) {
+                              if (result.loading) {
+                                return SettingItem(
+                                  'Name',
+                                );
+                              }
+                              if (result.data == null ||
+                                  result.data['user'] == null) {
+                                return SettingItem(
+                                  'Name',
+                                  value: 'An error occured',
+                                );
+                              }
+
+                              User profile = User.fromJson(result.data['user']);
+
+                              return SettingItem(
+                                'Name',
+                                value:
+                                    '${profile.firstName} ${profile.lastName}',
+                              );
+                            },
+                          ),
+                        ],
+                        label: Text('Profile'),
+                      ),
+                      SettingsGroup(
+                        [
+                          SettingItem(
+                            'Sign Out',
+                            hasAction: true,
+                            action: signOut,
+                          )
+                        ],
+                        label: Text('Advanced'),
+                      )
+                    ]),
+                  ),
+                )
+              ],
+            )));
   }
 
   signOut() async {

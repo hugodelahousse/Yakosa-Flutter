@@ -62,7 +62,8 @@ class ShoppingListsPageState extends State<ShoppingListsPage> {
 
   @override
   Widget build(BuildContext context) {
-    ScrollController _scrollController = PrimaryScrollController.of(context) ?? ScrollController();
+    ScrollController _scrollController =
+        PrimaryScrollController.of(context) ?? ScrollController();
     return CupertinoPageScaffold(
         backgroundColor: Colors.white,
         child: CustomScrollView(
@@ -71,7 +72,8 @@ class ShoppingListsPageState extends State<ShoppingListsPage> {
             CupertinoSliverNavigationBar(
               backgroundColor: CupertinoColors.white,
               key: UniqueKey(),
-              largeTitle: Text('Shopping Lists', style: TextStyle(color: Colors.black)),
+              largeTitle:
+                  Text('Shopping Lists', style: TextStyle(color: Colors.black)),
               trailing: IconButton(
                 padding: EdgeInsets.only(bottom: 10),
                 icon: Icon(

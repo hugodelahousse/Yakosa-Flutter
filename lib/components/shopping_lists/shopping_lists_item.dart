@@ -81,9 +81,9 @@ class ShoppingListsItem extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ShoppingListPage(
-                        shoppingListId: _id,
-                        name: _title,
-                      ),
+                    shoppingListId: _id,
+                    name: _title,
+                  ),
                 ),
               );
               _didTap();

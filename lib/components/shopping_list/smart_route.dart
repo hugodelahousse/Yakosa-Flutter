@@ -218,12 +218,12 @@ class SmartRouteState extends State<SmartRoute> {
       LatLng latlng = LatLng(position.latitude, position.longitude);
       print(latlng.toString());
       print({
-            "id": widget.shoppingListId,
-            "maxStores": 6,
-            "position":
-                "{\"type\": \"Point\", \"coordinates\": [${latlng.longitude}, ${latlng.latitude}]}",
-            "maxTravel": 1500,
-          });
+        "id": widget.shoppingListId,
+        "maxStores": 6,
+        "position":
+            "{\"type\": \"Point\", \"coordinates\": [${latlng.longitude}, ${latlng.latitude}]}",
+        "maxTravel": 1500,
+      });
       graphQLCLient.value
           .query(
         QueryOptions(

@@ -11,12 +11,9 @@ class ShoppingRoute {
   final List<Promotion> promotions;
   final double economie;
 
-  ShoppingRoute({
-    this.shoppingList,
-    this.stores,
-    this.promotions,
-    this.economie
-  });
+  ShoppingRoute(
+      {this.shoppingList, this.stores, this.promotions, this.economie});
 
-  factory ShoppingRoute.fromJson(Map<String, dynamic> json) => _$ShoppingRouteFromJson(json);
+  factory ShoppingRoute.fromJson(Map<String, dynamic> json) =>
+      _$ShoppingRouteFromJson(json);
 }

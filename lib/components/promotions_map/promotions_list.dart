@@ -71,80 +71,82 @@ class _PromotionsListState extends State<PromotionsList> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: Colors.white,
+        backgroundColor: Colors.white,
         child: CustomScrollView(
-      slivers: <Widget>[
-        CupertinoSliverNavigationBar(
-          backgroundColor: Colors.white,
-          middle: Text(""),
-          key: UniqueKey(),
-          largeTitle: Text('Promotions'),
-        ),
-        SliverPadding(padding: EdgeInsets.all(4)),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-          sliver: SliverToBoxAdapter(
-            child: SearchBar((terms) => _searchTerms(terms)),
-          ),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-          sliver: SliverToBoxAdapter(
-            child: FlatButton(
-              child: Text("Filters"),
-              color: Colors.grey[200],
-              onPressed: () async {
-                await Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => FilterPage()));
-                _refreshPreferences();
-              },
+          slivers: <Widget>[
+            CupertinoSliverNavigationBar(
+              backgroundColor: Colors.white,
+              middle: Text(""),
+              key: UniqueKey(),
+              largeTitle: Text('Promotions'),
             ),
-          ),
-        ),
-        SliverSafeArea(
-          top: false,
-          sliver: loading
-              ? SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 50),
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(Colors.purple),
-                      ),
-                    ),
-                  ),
-                )
-              : (displayedPromotions.length > 0
-                  ? SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          return PromotionItem(
-                              promotion: displayedPromotions[index],
-                              store: displayedPromotions[index].brand != null
-                                  ? displayedPromotions[index].brand.name
-                                  : "No store");
-                        },
-                        childCount: displayedPromotions.length,
-                      ),
-                    )
-                  : SliverToBoxAdapter(
+            SliverPadding(padding: EdgeInsets.all(4)),
+            SliverPadding(
+              padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+              sliver: SliverToBoxAdapter(
+                child: SearchBar((terms) => _searchTerms(terms)),
+              ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+              sliver: SliverToBoxAdapter(
+                child: FlatButton(
+                  child: Text("Filters"),
+                  color: Colors.grey[200],
+                  onPressed: () async {
+                    await Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => FilterPage()));
+                    _refreshPreferences();
+                  },
+                ),
+              ),
+            ),
+            SliverSafeArea(
+              top: false,
+              sliver: loading
+                  ? SliverToBoxAdapter(
                       child: Padding(
-                        padding: EdgeInsets.only(top: 50, left: 60, right: 60),
-                        child: Text(
-                          "No nearby promotions :(",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 30,
-                              color: CupertinoColors.inactiveGray,
-                              fontWeight: FontWeight.w500),
+                        padding: EdgeInsets.only(top: 50),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.purple),
+                          ),
                         ),
                       ),
-                    )),
-        ),
-        SliverPadding(padding: EdgeInsets.all(8)),
-      ],
-    ));
+                    )
+                  : (displayedPromotions.length > 0
+                      ? SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return PromotionItem(
+                                  promotion: displayedPromotions[index],
+                                  store: displayedPromotions[index].brand !=
+                                          null
+                                      ? displayedPromotions[index].brand.name
+                                      : "No store");
+                            },
+                            childCount: displayedPromotions.length,
+                          ),
+                        )
+                      : SliverToBoxAdapter(
+                          child: Padding(
+                            padding:
+                                EdgeInsets.only(top: 50, left: 60, right: 60),
+                            child: Text(
+                              "No nearby promotions :(",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 30,
+                                  color: CupertinoColors.inactiveGray,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        )),
+            ),
+            SliverPadding(padding: EdgeInsets.all(8)),
+          ],
+        ));
   }
 
   fetchStoresPromotions() {

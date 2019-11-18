@@ -50,7 +50,10 @@ class SearchBarState extends State<SearchBar> {
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border(),
-              boxShadow: [BoxShadow(blurRadius: 1, color: Colors.black26, offset: Offset(0, 1))],
+              boxShadow: [
+                BoxShadow(
+                    blurRadius: 1, color: Colors.black26, offset: Offset(0, 1))
+              ],
               borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
             prefix: Icon(

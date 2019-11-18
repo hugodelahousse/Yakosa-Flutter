@@ -15,9 +15,9 @@ class QuantityPicker extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _QuantityPickerState(
-      product,
-      onUpdateQuantity,
-  );
+        product,
+        onUpdateQuantity,
+      );
 }
 
 class _QuantityPickerState extends State<QuantityPicker> {
@@ -33,49 +33,55 @@ class _QuantityPickerState extends State<QuantityPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: EdgeInsets.all(20),
-          child: Text(
-            _product.product.info.product_name_fr ?? "No name",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      Padding(
+        padding: EdgeInsets.all(20),
+        child: Text(
+          _product.product.info.product_name_fr ?? "No name",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        ),
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.remove_circle_outline,
+              color: _color,
+            ),
+            onPressed: _decreaseQuantity,
           ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.remove_circle_outline, color: _color,),
-              onPressed: _decreaseQuantity,
-            ),
-            Text(
-              _currentQuantity.toString(),
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18),
-            ),
-            IconButton(
-              icon: Icon(Icons.add_circle_outline, color: _color,),
-              onPressed: _increaseQuantity,
-            )
-          ],
-        ),
-        Divider(height: 0,),
-        FlatButton(
-          child: _currentQuantity > 0 ?
           Text(
-            'Update',
-            style: TextStyle(color: _color),
-          ) : Text(
-            'Remove',
-            style: TextStyle(color: const Color(0xffff4118)),
+            _currentQuantity.toString(),
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18),
           ),
-          onPressed: () => _onUpdateQuantity(_currentQuantity),
-        ),
-      ]
-    );
+          IconButton(
+            icon: Icon(
+              Icons.add_circle_outline,
+              color: _color,
+            ),
+            onPressed: _increaseQuantity,
+          )
+        ],
+      ),
+      Divider(
+        height: 0,
+      ),
+      FlatButton(
+        child: _currentQuantity > 0
+            ? Text(
+                'Update',
+                style: TextStyle(color: _color),
+              )
+            : Text(
+                'Remove',
+                style: TextStyle(color: const Color(0xffff4118)),
+              ),
+        onPressed: () => _onUpdateQuantity(_currentQuantity),
+      ),
+    ]);
   }
 
   void _decreaseQuantity() {

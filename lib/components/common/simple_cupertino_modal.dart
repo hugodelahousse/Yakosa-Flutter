@@ -7,7 +7,8 @@ class SimpleCupertinoModal extends StatelessWidget {
   final String _successButton;
   final Function() _callback;
 
-  SimpleCupertinoModal(this._title, this._content, this._successButton, this._callback);
+  SimpleCupertinoModal(
+      this._title, this._content, this._successButton, this._callback);
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class BackgroundOverlay extends StatelessWidget {
-  
   final Color _color;
   final String _imagePath;
 
@@ -9,20 +8,18 @@ class BackgroundOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(_imagePath),
-                fit: BoxFit.cover,
-              )
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              gradient: LinearGradient(
+    return Stack(children: <Widget>[
+      Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+          image: AssetImage(_imagePath),
+          fit: BoxFit.cover,
+        )),
+      ),
+      Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            gradient: LinearGradient(
                 begin: FractionalOffset.topCenter,
                 end: FractionalOffset.bottomCenter,
                 colors: [
@@ -33,8 +30,7 @@ class BackgroundOverlay extends StatelessWidget {
                   0.0,
                   0.5
                 ])),
-          ),
-        ]
-    );
+      ),
+    ]);
   }
 }

@@ -7,7 +7,7 @@ import 'package:yakosa/screens/shopping_lists.dart';
 import 'package:yakosa/screens/promotions_map_page.dart';
 
 class Layout extends StatefulWidget {
-@override
+  @override
   State<StatefulWidget> createState() {
     return LayoutState();
   }
@@ -33,11 +33,12 @@ class LayoutState extends State<Layout> {
       child: SafeArea(
         top: false,
         child: Scaffold(
-          backgroundColor: Colors.white,
-          body: _screens[_currentPage]["page"],
-          bottomNavigationBar: Container(
+            backgroundColor: Colors.white,
+            body: _screens[_currentPage]["page"],
+            bottomNavigationBar: Container(
               decoration: BoxDecoration(
-                border: Border(top: BorderSide(color: Color(0xFFEEEEEE), width: 0.40)),
+                border: Border(
+                    top: BorderSide(color: Color(0xFFEEEEEE), width: 0.40)),
               ),
               height: 55,
               alignment: Alignment.center,
@@ -45,22 +46,26 @@ class LayoutState extends State<Layout> {
               child: BottomAppBar(
                 elevation: 0,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: _screens.asMap().map((index, x) =>
-                    MapEntry(index, IconButton(
-                      color: _currentPage == index ? Colors.purple : Colors.black,
-                      icon: Icon(x["icon"]),
-                      onPressed: () {
-                        setState(() {
-                          _currentPage = index;
-                        });
-                      },
-                    ))
-                  ).values.toList()
-                ),
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: _screens
+                        .asMap()
+                        .map((index, x) => MapEntry(
+                            index,
+                            IconButton(
+                              color: _currentPage == index
+                                  ? Colors.purple
+                                  : Colors.black,
+                              icon: Icon(x["icon"]),
+                              onPressed: () {
+                                setState(() {
+                                  _currentPage = index;
+                                });
+                              },
+                            )))
+                        .values
+                        .toList()),
               ),
-          )
-        ),
+            )),
       ),
     );
   }

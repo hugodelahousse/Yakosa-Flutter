@@ -41,10 +41,9 @@ class _InputTextState extends State<InputText> {
   Widget build(BuildContext context) {
     return CupertinoTextField(
       decoration: BoxDecoration(
-        color: CupertinoColors.white,
-        border: Border(),
-        borderRadius: BorderRadius.all(Radius.circular(8))
-      ),
+          color: CupertinoColors.white,
+          border: Border(),
+          borderRadius: BorderRadius.all(Radius.circular(8))),
       controller: _controller,
       focusNode: _focusNode,
     );

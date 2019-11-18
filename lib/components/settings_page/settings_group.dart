@@ -4,11 +4,11 @@ class SettingsGroup extends StatelessWidget {
   final List<Widget> _items;
   final Widget label;
 
-  SettingsGroup(this._items, { this.label });
+  SettingsGroup(this._items, {this.label});
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> dividedItems =_items.map<Widget>((item) {
+    final List<Widget> dividedItems = _items.map<Widget>((item) {
       if (_items.last == item) {
         return item;
       }
@@ -31,28 +31,25 @@ class SettingsGroup extends StatelessWidget {
     final List<Widget> itemsGroup = [];
 
     if (this.label != null) {
-      itemsGroup.add(
-        DefaultTextStyle(
-          style: TextStyle(
-            color: CupertinoColors.inactiveGray,
-            fontSize: 13.5,
-            letterSpacing: -0.5,
+      itemsGroup.add(DefaultTextStyle(
+        style: TextStyle(
+          color: CupertinoColors.inactiveGray,
+          fontSize: 13.5,
+          letterSpacing: -0.5,
+        ),
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: 15.0,
+            right: 15.0,
+            bottom: 6.0,
           ),
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: 15.0,
-              right: 15.0,
-              bottom: 6.0,
-            ),
-            child: this.label,
-          ),
-        )
-      );
+          child: this.label,
+        ),
+      ));
     }
 
-    itemsGroup.add(
-      Container(
-        decoration: BoxDecoration(
+    itemsGroup.add(Container(
+      decoration: BoxDecoration(
           color: CupertinoColors.white,
           border: Border(
             top: const BorderSide(
@@ -63,14 +60,12 @@ class SettingsGroup extends StatelessWidget {
               color: Color(0xFFBCBBC1),
               width: 0.0,
             ),
-          )
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: dividedItems,
-        ),
-      )
-    );
+          )),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: dividedItems,
+      ),
+    ));
 
     return Padding(
       padding: EdgeInsets.only(

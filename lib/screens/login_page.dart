@@ -8,14 +8,13 @@ import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:yakosa/utils/auth.dart';
 
 class LoginPage extends StatefulWidget {
-@override
+  @override
   State<StatefulWidget> createState() {
     return LoginPageState();
   }
 }
 
 class LoginPageState extends State<LoginPage> {
-
   Auth auth;
   bool _isLoading = false;
   set isLoading(bool value) {
@@ -35,7 +34,8 @@ class LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomPadding: false,
       body: Stack(
         children: <Widget>[
-          BackgroundOverlay(Color(0xFF780B7C), 'assets/images/yakosa_login.jpg'),
+          BackgroundOverlay(
+              Color(0xFF780B7C), 'assets/images/yakosa_login.jpg'),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -45,21 +45,28 @@ class LoginPageState extends State<LoginPage> {
                 SizedBox(
                   width: 300,
                   child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    GoogleSignInButton(text: 'Sign in with Google', onPressed: _googleConnect,),
-                    Divider(height: 10,),
-                    FacebookSignInButton(text: 'Sign in with Facebook', onPressed: _facebookConnect,),
-                  ]
-                ),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        GoogleSignInButton(
+                          text: 'Sign in with Google',
+                          onPressed: _googleConnect,
+                        ),
+                        Divider(
+                          height: 10,
+                        ),
+                        FacebookSignInButton(
+                          text: 'Sign in with Facebook',
+                          onPressed: _facebookConnect,
+                        ),
+                      ]),
                 )
               ],
             ),
-        ),
+          ),
         ],
       ),
-      );
+    );
   }
 
   _googleConnect() {

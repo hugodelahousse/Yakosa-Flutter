@@ -15,5 +15,6 @@ class ShoppingList {
     this.products,
   });
 
-  factory ShoppingList.fromJson(Map<String, dynamic> json) => _$ShoppingListFromJson(json);
+  factory ShoppingList.fromJson(Map<String, dynamic> json) =>
+      _$ShoppingListFromJson(json);
 }

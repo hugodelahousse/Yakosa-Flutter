@@ -13,7 +13,8 @@ class Position {
     this.coordinates,
   });
 
-  factory Position.fromJson(Map<String, dynamic> json) => _$PositionFromJson(json);
+  factory Position.fromJson(Map<String, dynamic> json) =>
+      _$PositionFromJson(json);
 }
 
 @JsonSerializable()
@@ -62,16 +63,15 @@ class Promotion {
   final double price;
   final double promotion;
 
-  Promotion({
-    this.id,
-    this.product,
-    this.brand,
-    this.store,
-    this.type,
-    this.price,
-    this.promotion
-  });
+  Promotion(
+      {this.id,
+      this.product,
+      this.brand,
+      this.store,
+      this.type,
+      this.price,
+      this.promotion});
 
-  factory Promotion.fromJson(Map<String, dynamic> json) => _$PromotionFromJson(json);
+  factory Promotion.fromJson(Map<String, dynamic> json) =>
+      _$PromotionFromJson(json);
 }
-
