@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,11 +34,13 @@ class SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: Colors.white,
       child: Container(
         color: Color(0xFFEFEFF4),
         child: CustomScrollView(
           slivers: <Widget>[
             CupertinoSliverNavigationBar(
+              backgroundColor: Colors.white,
               largeTitle: Text('Settings'),
             ),
             SliverSafeArea(

@@ -22,6 +22,7 @@ class Routes {
       runApp(GraphQLProvider(
           client: graphQLCLient,
           child: CupertinoApp(
+            theme: CupertinoThemeData(brightness: Brightness.light, barBackgroundColor: Colors.black),
             localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
                 DefaultMaterialLocalizations.delegate,
                 DefaultWidgetsLocalizations.delegate,
