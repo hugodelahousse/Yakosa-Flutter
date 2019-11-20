@@ -76,7 +76,6 @@ class _PromotionsListState extends State<PromotionsList> {
           slivers: <Widget>[
             CupertinoSliverNavigationBar(
               backgroundColor: Colors.white,
-              middle: Text(""),
               key: UniqueKey(),
               largeTitle: Text('Promotions'),
             ),

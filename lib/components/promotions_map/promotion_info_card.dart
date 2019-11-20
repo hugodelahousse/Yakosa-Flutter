@@ -50,7 +50,7 @@ class _PromotionInfoCardState extends State<PromotionInfoCard> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(3.0),
-                    child: Text(widget.store, style: TextStyle(fontSize: 20)),
+                    child: Text(widget.store != null ? widget.store : "", style: TextStyle(fontSize: 20)),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(3.0),
@@ -58,22 +58,22 @@ class _PromotionInfoCardState extends State<PromotionInfoCard> {
                       text: TextSpan(
                           style: DefaultTextStyle.of(context).style,
                           children: <TextSpan>[
-                            TextSpan(
+                            if (widget.newPrice != null) TextSpan(
                                 text:
                                     '${(widget.newPrice).toStringAsFixed(2)}€',
                                 style: TextStyle(
                                     color: Colors.green, fontSize: 20)),
-                            TextSpan(
+                            if (widget.oldPrice != null) TextSpan(
                                 text: ' (',
                                 style: TextStyle(
                                     color: Colors.redAccent, fontSize: 20)),
-                            TextSpan(
+                            if (widget.oldPrice != null) TextSpan(
                                 text: '${widget.oldPrice}€',
                                 style: TextStyle(
                                     decoration: TextDecoration.lineThrough,
                                     color: Colors.redAccent,
                                     fontSize: 20)),
-                            TextSpan(
+                            if (widget.oldPrice != null) TextSpan(
                                 text: ')',
                                 style: TextStyle(
                                     color: Colors.redAccent, fontSize: 20)),
@@ -82,7 +82,7 @@ class _PromotionInfoCardState extends State<PromotionInfoCard> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(3.0),
-                    child: Text(widget.brand, style: TextStyle(fontSize: 20)),
+                    child: Text(widget.brand != null ? widget.brand : "", style: TextStyle(fontSize: 20)),
                   ),
                 ],
               ),

@@ -96,8 +96,7 @@ class ShoppingListPageState extends State<ShoppingListPage> {
 
   _addProduct(String productId, int quantity) {
     if (quantity <= 0) return;
-    ListProduct product =
-        products.firstWhere((p) => p.product.barcode == productId);
+    ListProduct product = products.firstWhere((p) => p.product.barcode == productId, orElse: () => null);
     if (product != null && product.quantity != quantity)
       graphQLCLient.value
           .mutate(MutationOptions(
@@ -183,6 +182,7 @@ class ShoppingListPageState extends State<ShoppingListPage> {
                       MaterialPageRoute(
                           builder: (context) => SmartRoute(
                                 shoppingListId: widget.shoppingListId,
+                                products: products,
                               ))),
                   child: Container(
                     padding: EdgeInsets.all(15),
