@@ -311,11 +311,13 @@ class SmartRouteState extends State<SmartRoute> {
   _loadRoute(String shoppingListId) {
     _location.getLocation().then((position) {
       LatLng latlng = LatLng(position.latitude, position.longitude);
+      print(latlng.latitude);
+      print(latlng.longitude);
       graphQLCLient.value
           .query(
         QueryOptions(
           fetchPolicy: FetchPolicy.noCache,
-          document: shoppingRouteQuery,
+          documentNode: gql(shoppingRouteQuery),
           variables: {
             "id": widget.shoppingListId,
             "maxStores": 6,
@@ -326,7 +328,7 @@ class SmartRouteState extends State<SmartRoute> {
         ),
       )
           .then((result) {
-        if (result.errors == null && result.data != null) {
+        if (result.exception == null && result.data != null) {
           ShoppingRoute shoppingRoute =
               ShoppingRoute.fromJson(result.data['shoppingRoute']);
           List<Promotion> promotions = List<Promotion>();

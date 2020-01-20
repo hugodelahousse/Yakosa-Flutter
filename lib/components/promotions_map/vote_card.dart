@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class VoteCard extends StatefulWidget {
-  final int positiveVotes;
-  final int negativeVotes;
+  int positiveVotes;
+  int negativeVotes;
+  int selected;
   final Function onVote;
 
-  VoteCard(this.positiveVotes, this.negativeVotes, this.onVote);
+  VoteCard(this.positiveVotes, this.negativeVotes,this.onVote, { this.selected = 0 });
 
   _VoteCardState createState() => _VoteCardState();
 }
@@ -27,7 +28,7 @@ class _VoteCardState extends State<VoteCard> {
         children: <Widget>[
           Expanded(
             child: GestureDetector(
-              onTap: () => widget.onVote(1),
+              onTap: () => {vote(1)},
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -57,7 +58,7 @@ class _VoteCardState extends State<VoteCard> {
                     ),
                     Icon(
                       Icons.thumb_up,
-                      color: Colors.white,
+                      color: widget.selected == 1 ? Colors.black : Colors.white,
                       size: 40,
                     ),
                   ],
@@ -67,7 +68,7 @@ class _VoteCardState extends State<VoteCard> {
           ),
           Expanded(
             child: GestureDetector(
-              onTap: () => widget.onVote(-1),
+              onTap: () => { vote(-1) },
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -97,7 +98,7 @@ class _VoteCardState extends State<VoteCard> {
                     ),
                     Icon(
                       Icons.thumb_down,
-                      color: Colors.white,
+                      color: widget.selected == -1 ? Colors.black : Colors.white,
                       size: 40,
                     ),
                   ],
@@ -108,5 +109,39 @@ class _VoteCardState extends State<VoteCard> {
         ],
       ),
     );
+  }
+
+  vote(count) {
+    widget.onVote(count);
+    setState(() {
+      if (count == -1) {
+        if (widget.selected == -1) {
+          widget.negativeVotes--;
+          widget.selected = 0;
+        }
+        else if (widget.selected == 0) {
+          widget.negativeVotes++;
+          widget.selected = -1;
+        } else {
+          widget.positiveVotes--;
+          widget.negativeVotes++;
+          widget.selected = -1;
+        }
+      }
+      if (count == 1) {
+        if (widget.selected == 1) {
+          widget.positiveVotes--;
+          widget.selected = 0;
+        }
+        else if (widget.selected == 0) {
+          widget.positiveVotes++;
+          widget.selected = 1;
+        } else {
+          widget.negativeVotes--;
+          widget.positiveVotes++;
+          widget.selected = 1;
+        }
+      }
+    });
   }
 }

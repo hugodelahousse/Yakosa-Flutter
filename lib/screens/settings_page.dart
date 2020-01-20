@@ -50,9 +50,13 @@ class SettingsPageState extends State<SettingsPage> {
                         [
                           Query(
                             options: QueryOptions(
-                                document: query, variables: {"id": 12}),
-                            builder: (QueryResult result,
-                                {VoidCallback refetch}) {
+                                documentNode: gql(query),
+                                variables: {"id": 12}),
+                            builder: (
+                              QueryResult result, {
+                              Future<QueryResult> Function() refetch,
+                              FetchMore fetchMore,
+                            }) {
                               if (result.loading) {
                                 return SettingItem(
                                   'Name',

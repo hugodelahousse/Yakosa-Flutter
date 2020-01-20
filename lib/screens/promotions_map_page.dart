@@ -236,7 +236,7 @@ class PromotionsMapPageState extends State<PromotionsMapPage>
       ),
     )
         .then((result) {
-      if (result.errors == null && result.data != null) {
+      if (result.exception== null && result.data != null) {
         List resultList = result.data['nearbyStore'];
         List<Store> newStores = [];
         for (var i = 0; i < resultList.length; i++) {

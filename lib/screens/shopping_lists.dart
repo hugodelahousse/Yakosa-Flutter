@@ -147,11 +147,11 @@ class ShoppingListsPageState extends State<ShoppingListsPage> {
     graphQLCLient.value
         .query(
       QueryOptions(
-          document: shoppingListQuery,
+          documentNode: gql(shoppingListQuery),
           fetchPolicy: FetchPolicy.cacheAndNetwork),
     )
         .then((result) {
-      if (result.errors == null && result.data != null) {
+      if (result.exception == null && result.data != null) {
         List list = result.data['user']['lists'];
         List<ShoppingList> tmpList = [];
         for (var i = 0; i < list.length; i++) {
@@ -180,12 +180,12 @@ class ShoppingListsPageState extends State<ShoppingListsPage> {
     graphQLCLient.value
         .mutate(
       MutationOptions(
-        document: shoppingListCreateMutation,
+        documentNode: gql(shoppingListCreateMutation),
         variables: {'name': name},
       ),
     )
         .then((result) {
-      if (result.errors == null && result.data != null) {
+      if (result.exception== null && result.data != null) {
         ShoppingList sl = ShoppingList.fromJson(result.data['createList']);
         setState(() {
           shoppingLists.add(sl);
@@ -201,12 +201,12 @@ class ShoppingListsPageState extends State<ShoppingListsPage> {
     graphQLCLient.value
         .mutate(
       MutationOptions(
-        document: removeShoppingList,
+        documentNode: gql(removeShoppingList),
         variables: {'id': sl.id},
       ),
     )
         .then((result) {
-      if (result.errors == null && result.data != null) {
+      if (result.exception == null && result.data != null) {
         Scaffold.of(context).showSnackBar(SnackBar(
           content: Text("List removed"),
           duration: Duration(seconds: 1),

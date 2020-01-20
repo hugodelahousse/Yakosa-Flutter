@@ -9,6 +9,7 @@ import './screens/layout.dart';
 import './utils/auth.dart';
 import './utils/graphql.dart';
 
+
 class Routes {
   final routes = <String, WidgetBuilder>{
       '/login': (context) => LoginPage(),

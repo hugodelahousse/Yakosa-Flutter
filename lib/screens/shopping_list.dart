@@ -76,11 +76,11 @@ class ShoppingListPageState extends State<ShoppingListPage> {
     graphQLCLient.value
         .query(QueryOptions(
       fetchPolicy: withCache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
-      document: fetchShoppingList,
+      documentNode: gql(fetchShoppingList),
       variables: {"id": widget.shoppingListId},
     ))
         .then((result) {
-      if (result.errors == null && result.data != null) {
+      if (result.exception == null && result.data != null) {
         List list = result.data['shoppingList']['products'];
         List<ListProduct> tmpList = [];
         for (var i = 0; i < list.length; i++) {
@@ -88,7 +88,7 @@ class ShoppingListPageState extends State<ShoppingListPage> {
         }
         setState(() => products = tmpList);
       } else {
-        print(result.errors.toString());
+        print(result.exception.toString());
       }
       setState(() => loading = false);
     });
@@ -100,20 +100,20 @@ class ShoppingListPageState extends State<ShoppingListPage> {
     if (product != null && product.quantity != quantity)
       graphQLCLient.value
           .mutate(MutationOptions(
-        document: updateQuantityMutation,
+        documentNode: gql(updateQuantityMutation),
         variables: {'id': product.id, 'quantity': quantity, 'unit': 'UNIT'},
       ))
           .then((result) {
-        if (result.errors == null && result.data != null) {
+        if (result.exception== null && result.data != null) {
           _fetchProducts(false);
         } else {
-          print(result.errors.toString());
+          print(result.exception.toString());
         }
       });
     else if (product == null)
       graphQLCLient.value
           .mutate(
-        MutationOptions(document: addProductsToList, variables: {
+        MutationOptions(documentNode: gql(addProductsToList), variables: {
           'list': widget.shoppingListId,
           'barcode': productId,
           'quantity': quantity,
@@ -121,10 +121,10 @@ class ShoppingListPageState extends State<ShoppingListPage> {
         }),
       )
           .then((result) {
-        if (result.errors == null && result.data != null) {
+        if (result.exception == null && result.data != null) {
           _fetchProducts(false);
         } else {
-          print(result.errors.toString());
+          print(result.exception.toString());
         }
       });
   }

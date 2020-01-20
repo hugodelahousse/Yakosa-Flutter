@@ -153,7 +153,7 @@ class _PromotionsListState extends State<PromotionsList> {
     graphQLCLient.value
         .query(
       QueryOptions(
-        document: fetchNearbyStores,
+        documentNode: gql(fetchNearbyStores),
         variables: {
           "position":
               "{\"type\": \"Point\", \"coordinates\": [${widget.positionLong}, ${widget.positionLat}]}",
@@ -163,7 +163,7 @@ class _PromotionsListState extends State<PromotionsList> {
       ),
     )
         .then((result) {
-      if (result.errors == null && result.data != null) {
+      if (result.exception == null && result.data != null) {
         List stores = result.data['nearbyStore'];
         var newPromotions = List<Promotion>();
         stores.forEach((s) {

@@ -129,14 +129,14 @@ class _PromotionsStoreListState extends State<PromotionsStoreList> {
     graphQLCLient.value
         .query(
       QueryOptions(
-        document: storePromotionsQuery,
+        documentNode: gql(storePromotionsQuery),
         variables: {
           "id": widget.storeId,
         },
       ),
     )
         .then((result) {
-      if (result.errors == null && result.data != null) {
+      if (result.exception == null && result.data != null) {
         List promotionsResult = result.data['store']['brand']['promotions'];
         List<Promotion> newPromotions = [];
         promotionsResult.forEach((p) {
