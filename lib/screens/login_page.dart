@@ -43,6 +43,13 @@ class LoginPageState extends State<LoginPage> {
                 Logo(100, 'assets/images/yakosa_logo.png'),
                 LoginSlider(),
                 SizedBox(
+                  width: 32,
+                  height: 32,
+                  child: _isLoading ? 
+                    CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white),)
+                    : Container(),
+                ),
+                SizedBox(
                   width: 300,
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
